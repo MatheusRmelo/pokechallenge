@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "492800447963",
+    "project_id": "pokemon-3d480",
+    "storage_bucket": "pokemon-3d480.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492800447963:android:5889d5e1dedcadcfe183fe",
+        "android_client_info": {
+          "package_name": "com.matheusrmelo.pokemon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "492800447963-efa4gnln9v2sfdm7qtuq1nf5og9mdjir.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matheusrmelo.pokemon",
+            "certificate_hash": "0921ea2010416fb7d5487267954c2f20ad646195"
+          }
+        },
+        {
+          "client_id": "492800447963-ni4lllak2713mt72orqhckghthkeq6rj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF1senkcr9Y8sHIJAm9L_nbDQfTo_8mls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492800447963-ni4lllak2713mt72orqhckghthkeq6rj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
