@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:pokemon/app/modules/home/home_controller.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/app/modules/home/repository/pokeapi_repository.dart';
 import 'package:pokemon/app/modules/home/widgets/poke_card.dart';
@@ -17,7 +16,6 @@ class DiscoveryWidget extends StatefulWidget {
 }
 
 class _DiscoveryWidgetState extends State<DiscoveryWidget> {
-  HomeController controller = Modular.get<HomeController>();
   PokeApiRepository repository = Modular.get<PokeApiRepository>();
   Timer _timer = Timer(Duration(seconds: 1), () {});
   bool loading = true;

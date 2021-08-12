@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/home_controller.dart';
+import 'package:pokemon/app/modules/home/widgets/poke_card.dart';
 import 'package:pokemon/utils/texts.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -62,11 +63,19 @@ class _HomeWidgetState extends State<HomeWidget> {
               ],
             );
           }),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.red[400],
+            child: Icon(Icons.add),
+            onPressed: () {
+              Modular.to.pushNamed("discovery");
+            },
+          ),
         ));
   }
 
   Widget _pokedexWidget() {
     return Container(
+      padding: EdgeInsets.all(16),
       child: controller.pokedex!.value!.isEmpty
           ? Center(
               child: Column(
@@ -105,9 +114,17 @@ class _HomeWidgetState extends State<HomeWidget> {
                 ],
               ),
             )
-          : Column(
-              children: [const Text("")],
-            ),
+          : ListView.builder(
+              itemCount: controller.pokedex!.value!.length,
+              itemBuilder: (context, index) {
+                Size size = MediaQuery.of(context).size;
+
+                return pokeCard(
+                    fullWidth: size.width,
+                    fullHeight: size.height,
+                    index: index,
+                    pokemon: controller.pokedex!.value![index]);
+              }),
     );
   }
 }

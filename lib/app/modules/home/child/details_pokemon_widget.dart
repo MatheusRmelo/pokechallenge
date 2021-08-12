@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/models/pokeball_model.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
+import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
 import 'package:pokemon/utils/texts.dart';
 
 class DetailsPokemonWidget extends StatefulWidget {
@@ -17,6 +18,10 @@ class DetailsPokemonWidget extends StatefulWidget {
 }
 
 class _DetailsPokemonWidgetState extends State<DetailsPokemonWidget> {
+  FirestoreRepository repository = Modular.get<FirestoreRepository>();
+
+  String doc = "";
+  String obs = "";
   PokeballModel pokeball = PokeballModel("pokeball", 100);
   String status = "";
   bool catchPoke = false;
@@ -25,17 +30,28 @@ class _DetailsPokemonWidgetState extends State<DetailsPokemonWidget> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    void goCatch() {
+    void goCatch() async {
       Random random = new Random();
       int randomNumber = random.nextInt(pokeball.rate);
-      setState(() {
-        catchPoke = widget.pokemon!.baseExperience <= randomNumber;
-        if (widget.pokemon!.baseExperience <= randomNumber) {
-          status = "Parabéns! Você capturou o ${widget.pokemon!.name}";
+      if (widget.pokemon!.baseExperience <= randomNumber) {
+        var result = await repository.saveCatch(widget.pokemon, pokeball.name);
+        if (result != "") {
+          setState(() {
+            doc = result;
+            catchPoke = true;
+            status = "Parabéns! Você capturou o ${widget.pokemon!.name}";
+          });
         } else {
-          status = "Sua ${pokeball.name} quebrou :(";
+          setState(() {
+            status = "Falha ao salvar o catch!";
+          });
         }
-      });
+      } else {
+        setState(() {
+          catchPoke = false;
+          status = "Sua ${pokeball.name} quebrou :(";
+        });
+      }
     }
 
     return Scaffold(
@@ -86,6 +102,11 @@ class _DetailsPokemonWidgetState extends State<DetailsPokemonWidget> {
                         padding: EdgeInsets.only(left: 8),
                         height: 100,
                         child: TextFormField(
+                          onChanged: (text) {
+                            setState(() {
+                              obs = text;
+                            });
+                          },
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Observações da captura"),
@@ -98,8 +119,11 @@ class _DetailsPokemonWidgetState extends State<DetailsPokemonWidget> {
                         child: ElevatedButton(
                             style:
                                 ElevatedButton.styleFrom(primary: Colors.green),
-                            onPressed: () {
-                              Modular.to.navigate("/home");
+                            onPressed: () async {
+                              var result = await repository.saveObs(doc, obs);
+                              if (result) {
+                                Modular.to.navigate("/home");
+                              }
                             },
                             child: Text("Continuar")),
                       )
