@@ -27,12 +27,28 @@ class FirestoreRepository {
     return pokedex;
   }
 
+  Future<List<PokemonModel>> getMyPokemons() async {
+    List<PokemonModel> pokemons = [];
+    var result = await _collectionCatch
+        .doc(_auth.currentUser!.uid)
+        .collection("pokemons")
+        .get();
+
+    result.docs.forEach((element) {
+      PokemonModel pokemon = PokemonModel(element['id'], element['name'],
+          element['image'], element['baseExperience']);
+      pokemons.add(pokemon);
+    });
+    return pokemons;
+  }
+
   Future<bool> discoveryPokemon(PokemonModel? pokemon) async {
     bool result = await _collectionPokedex
         .doc(_auth.currentUser!.uid)
         .collection("pokemons")
-        .add({
-      'name': pokemon!.name,
+        .doc(pokemon!.id.toString())
+        .set({
+      'name': pokemon.name,
       'image': pokemon.image,
       'id': pokemon.id,
       "baseExperience": pokemon.baseExperience

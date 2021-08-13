@@ -1,38 +1,21 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
-import 'package:pokemon/app/modules/home/repository/pokeapi_repository.dart';
 import 'package:pokemon/app/modules/home/widgets/poke_card.dart';
 import 'package:pokemon/utils/texts.dart';
 
-class DiscoveryWidget extends StatefulWidget {
-  const DiscoveryWidget({Key? key}) : super(key: key);
+class DiscoveryView extends StatelessWidget {
+  const DiscoveryView(
+      {Key? key,
+      this.goBack,
+      this.setSearch,
+      this.pokemons,
+      this.loading = false})
+      : super(key: key);
 
-  @override
-  _DiscoveryWidgetState createState() => _DiscoveryWidgetState();
-}
-
-class _DiscoveryWidgetState extends State<DiscoveryWidget> {
-  PokeApiRepository repository = Modular.get<PokeApiRepository>();
-  Timer _timer = Timer(Duration(seconds: 1), () {});
-  bool loading = true;
-  List<PokemonModel>? pokemons;
-  String search = "";
-
-  void searchPokemons() async {
-    setState(() {
-      loading = true;
-    });
-
-    var newPokemons = await repository.searchPokemons(search.toLowerCase());
-    setState(() {
-      loading = false;
-      pokemons = newPokemons;
-    });
-  }
+  final Function? goBack;
+  final Function? setSearch;
+  final List<PokemonModel>? pokemons;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +32,7 @@ class _DiscoveryWidgetState extends State<DiscoveryWidget> {
             color: Colors.black,
           ),
           onPressed: () {
-            Modular.to.pop();
+            goBack!();
           },
         ),
       ),
@@ -86,15 +69,7 @@ class _DiscoveryWidgetState extends State<DiscoveryWidget> {
                         size: 32,
                       )),
                   onChanged: (text) {
-                    setState(() {
-                      search = text;
-                      if (_timer.isActive) {
-                        _timer.cancel();
-                      }
-                      _timer = Timer(Duration(seconds: 1), () {
-                        searchPokemons();
-                      });
-                    });
+                    setSearch!(text);
                   }),
             ),
             pokemons == null

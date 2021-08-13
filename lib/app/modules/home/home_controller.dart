@@ -1,47 +1,60 @@
-import 'dart:async';
-
-import 'package:mobx/mobx.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokemon/app/modules/home/home_view.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
-import 'package:pokemon/app/modules/home/repository/pokeapi_repository.dart';
-part 'home_controller.g.dart';
 
-class HomeController = _HomeControllerBase with _$HomeController;
+class HomeControlller extends StatefulWidget {
+  const HomeControlller({Key? key}) : super(key: key);
 
-abstract class _HomeControllerBase with Store {
-  final PokeApiRepository _pokeapiRepository;
-  final FirestoreRepository _firestoreRepository;
+  @override
+  _HomeControlllerState createState() => _HomeControlllerState();
+}
 
-  @observable
-  Timer _timer = Timer(Duration(seconds: 3), () {});
+class _HomeControlllerState extends State<HomeControlller> {
+  FirestoreRepository repository = Modular.get<FirestoreRepository>();
+  bool loading = true;
+  List<PokemonModel> pokedex = [];
+  List<PokemonModel> pokemons = [];
 
-  @observable
-  ObservableFuture<List<PokemonModel>>? pokedex;
-  @observable
-  ObservableFuture<List<PokemonModel>>? discoveryPokemons;
-
-  _HomeControllerBase(this._pokeapiRepository, this._firestoreRepository) {
-    getMyPokedex();
+  @override
+  void initState() {
+    super.initState();
+    getPokemons();
   }
 
-  void getMyPokedex() {
-    pokedex = _firestoreRepository.getMyPokedex().asObservable();
-    discoveryPokemons = _pokeapiRepository.searchPokemons("").asObservable();
-  }
-
-  // void searchPokemons(String search) async {
-  //   loading = true;
-  //   discoveryPokemons =
-  //       await _pokeapiRepository.searchPokemons(search.toLowerCase());
-  // }
-
-  void setSearch(String value) {
-    if (_timer.isActive) {
-      _timer.cancel();
-    }
-    _timer = Timer(Duration(seconds: 3), () {
-      discoveryPokemons =
-          _pokeapiRepository.searchPokemons(value.toLowerCase()).asObservable();
+  void getPokemons() async {
+    setState(() {
+      loading = true;
     });
+    List<PokemonModel> newPokedex = await repository.getMyPokedex();
+    List<PokemonModel> newPokemons = await repository.getMyPokemons();
+    setState(() {
+      pokedex = newPokedex;
+      pokemons = newPokemons;
+      loading = false;
+    });
+  }
+
+  void addPokemon() {
+    Modular.to.pushNamed("discovery");
+  }
+
+  void logout() {
+    FirebaseAuth.instance.signOut().then((value) {
+      Modular.to.navigate("/auth");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return HomeView(
+      addPokemon: addPokemon,
+      loading: loading,
+      logout: logout,
+      pokedex: pokedex,
+      pokemons: pokemons,
+    );
   }
 }
