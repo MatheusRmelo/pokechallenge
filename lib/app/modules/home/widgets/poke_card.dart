@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
-Widget pokeCard(
-    {int index = 0,
-    PokemonModel? pokemon,
-    double fullWidth = 60,
-    double fullHeight = 60}) {
+Widget pokeCard({
+  int index = 0,
+  String nextRouter = "details",
+  PokemonModel? pokemon,
+  double fullWidth = 60,
+  double fullHeight = 60,
+}) {
   return GestureDetector(
-    onTap: () async {
-      Modular.to.pushNamed("details", arguments: pokemon);
+    onTap: () {
+      print(nextRouter);
+      Modular.to.pushNamed(nextRouter, arguments: pokemon);
     },
     child: Container(
       decoration: BoxDecoration(

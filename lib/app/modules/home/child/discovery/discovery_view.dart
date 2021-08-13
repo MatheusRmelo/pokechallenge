@@ -93,6 +93,7 @@ class DiscoveryView extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 PokemonModel pokemon = pokemons![index];
                                 return pokeCard(
+                                    nextRouter: "catch",
                                     index: index,
                                     pokemon: pokemon,
                                     fullHeight: size.height,

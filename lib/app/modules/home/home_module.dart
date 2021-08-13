@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokemon/app/modules/home/child/catch/catch_controller.dart';
 import 'package:pokemon/app/modules/home/child/details/details_controller.dart';
 import 'package:pokemon/app/modules/home/child/discovery/discovery_controller.dart';
 import 'package:pokemon/app/modules/home/home_controller.dart';
@@ -17,6 +18,10 @@ class HomeModule extends Module {
             child: (_, args) => const DiscoveryController()),
         ChildRoute('/details',
             child: (_, args) => DetailsController(
+                  pokemon: args.data,
+                )),
+        ChildRoute('/catch',
+            child: (_, args) => CatchController(
                   pokemon: args.data,
                 )),
       ];
