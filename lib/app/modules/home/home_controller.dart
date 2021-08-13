@@ -61,6 +61,7 @@ class _HomeControlllerState extends State<HomeControlller> {
     bool favorite = !pokemon.favorite;
     List<PokemonModel> newPokemons = pokemons;
     List<PokemonModel> newPokedex = pokedex;
+    List<PokemonModel> newFavorites = favorites;
 
     newPokemons.forEach((element) {
       if (element.id == pokemon.id) {
@@ -74,6 +75,11 @@ class _HomeControlllerState extends State<HomeControlller> {
         element.favorite = favorite;
       }
     });
+    if (favorite) {
+      newFavorites.add(pokemon);
+    } else {
+      newFavorites.remove(pokemon);
+    }
     setState(() {
       pokedex = newPokedex;
       pokemons = newPokemons;

@@ -73,6 +73,30 @@ class FirestoreRepository {
     return result;
   }
 
+  Future<List<PokemonModel>> discoveryPokemon2(
+      PokemonModel? pokemon, List<PokemonModel> currentPokemons) async {
+    await _collectionPokedex
+        .doc(_auth.currentUser!.uid)
+        .collection("pokemons")
+        .doc(pokemon!.id.toString())
+        .set({
+      'name': pokemon.name,
+      'image': pokemon.image,
+      'id': pokemon.id,
+      "baseExperience": pokemon.baseExperience,
+      "favorite": pokemon.favorite,
+    }).then((value) {
+      currentPokemons.add(pokemon);
+      return true;
+    }).catchError((error) {
+      return false;
+    });
+    print("_-------------------------");
+    print(currentPokemons);
+    print("-------------------------------");
+    return currentPokemons;
+  }
+
   Future<String> saveCatch(PokemonModel? pokemon, String pokeball) async {
     String result = await _collectionCatch
         .doc(_auth.currentUser!.uid)
@@ -94,18 +118,8 @@ class FirestoreRepository {
 
   Future<bool> favoritePokemon(
       String docCatch, String docDex, bool favorite) async {
-    var result = await _collectionCatch
-        .doc(_auth.currentUser!.uid)
-        .collection("pokemons")
-        .doc(docCatch)
-        .update({
-      "favorite": favorite,
-    }).then((value) {
-      return true;
-    }).catchError((error) {
-      return false;
-    });
-    if (result) {
+    var result = false;
+    if (docDex != "") {
       result = await _collectionPokedex
           .doc(_auth.currentUser!.uid)
           .collection("pokemons")
@@ -117,6 +131,21 @@ class FirestoreRepository {
       }).catchError((error) {
         return false;
       });
+    }
+    if (result) {
+      if (docCatch != "") {
+        result = await _collectionCatch
+            .doc(_auth.currentUser!.uid)
+            .collection("pokemons")
+            .doc(docCatch)
+            .update({
+          "favorite": favorite,
+        }).then((value) {
+          return true;
+        }).catchError((error) {
+          return false;
+        });
+      }
     }
 
     return result;

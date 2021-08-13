@@ -1,104 +1,112 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokemon/app/modules/home/home_view.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
+import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
 import 'package:pokemon/app/modules/home/widgets/poke_card.dart';
+import 'package:pokemon/app/modules/main/main_controller.dart';
 import 'package:pokemon/utils/texts.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView(
-      {Key? key,
-      this.logout,
-      this.addPokemon,
-      this.loading = true,
-      this.pokedex,
-      this.pokemons,
-      this.favorites,
-      this.setFavorite})
-      : super(key: key);
+class MainWidget extends StatefulWidget {
+  const MainWidget({Key? key}) : super(key: key);
 
-  final Function? logout;
-  final Function? addPokemon;
-  final Function? setFavorite;
+  @override
+  _MainWidgetState createState() => _MainWidgetState();
+}
 
-  final bool loading;
-  final List<PokemonModel>? pokedex;
-  final List<PokemonModel>? pokemons;
-  final List<PokemonModel>? favorites;
+class _MainWidgetState extends State<MainWidget> {
+  MainController controller = Modular.get<MainController>();
+
+  void addPokemon() {
+    Modular.to.pushNamed("discovery");
+  }
+
+  void logout() {
+    FirebaseAuth.instance.signOut().then((value) {
+      Modular.to.navigate("/auth");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    logout!();
-                  },
-                  icon: Icon(Icons.logout))
-            ],
-            bottom: TabBar(
-              tabs: [
-                Tab(
-                  icon: Image.asset(
-                    "assets/pokedex.png",
-                    width: 32,
-                    height: 32,
-                  ),
-                  text: "Pokédex",
-                ),
-                Tab(
-                  icon: Image.asset(
-                    "assets/gocatch.png",
-                    width: 32,
-                    height: 32,
-                  ),
-                  text: "Capturados",
-                ),
-                Tab(
-                  icon: Image.asset(
-                    "assets/heart.png",
-                    width: 32,
-                    height: 32,
-                  ),
-                  text: "Favoritos",
-                )
+    return Observer(builder: (context) {
+      return DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      logout();
+                    },
+                    icon: Icon(Icons.logout))
               ],
+              bottom: TabBar(
+                tabs: [
+                  Tab(
+                    icon: Image.asset(
+                      "assets/pokedex.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                    text: "Pokédex",
+                  ),
+                  Tab(
+                    icon: Image.asset(
+                      "assets/gocatch.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                    text: "Capturados",
+                  ),
+                  Tab(
+                    icon: Image.asset(
+                      "assets/heart.png",
+                      width: 32,
+                      height: 32,
+                    ),
+                    text: "Favoritos",
+                  )
+                ],
+              ),
             ),
-          ),
-          body: loading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : TabBarView(
-                  children: [
-                    _pokedexWidget(),
-                    _pokemonWidget(),
-                    _favoriteWidget(),
-                  ],
-                ),
-          floatingActionButton: pokedex!.isNotEmpty
-              ? FloatingActionButton(
-                  backgroundColor: Colors.red[400],
-                  child: Icon(Icons.add),
-                  onPressed: () {
-                    addPokemon!();
-                  },
-                )
-              : Container(),
-        ));
+            body: controller.pokedex!.value == null
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : TabBarView(
+                    children: [
+                      _pokedexWidget(),
+                      _pokemonWidget(),
+                      _favoriteWidget(),
+                    ],
+                  ),
+            floatingActionButton: controller.pokedex!.value != null &&
+                    controller.pokedex!.value!.isNotEmpty
+                ? FloatingActionButton(
+                    backgroundColor: Colors.red[400],
+                    child: Icon(Icons.add),
+                    onPressed: () {
+                      addPokemon();
+                    },
+                  )
+                : Container(),
+          ));
+    });
   }
 
   Widget _pokedexWidget() {
     return Container(
       padding: EdgeInsets.all(16),
-      child: pokedex!.isEmpty
+      child: controller.pokedex!.value!.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Nenhum pokémon avistado ainda!",
+                    "Nenhum pokémon avistado ainda",
                     style: tsHeading2,
                     textAlign: TextAlign.center,
                   ),
@@ -111,7 +119,7 @@ class HomeView extends StatelessWidget {
                         color: Colors.red[400]),
                     child: IconButton(
                         onPressed: () {
-                          addPokemon!();
+                          addPokemon();
                         },
                         icon: const Icon(
                           Icons.add,
@@ -123,7 +131,7 @@ class HomeView extends StatelessWidget {
               ),
             )
           : ListView.builder(
-              itemCount: pokedex!.length,
+              itemCount: controller.pokedex!.value!.length,
               itemBuilder: (context, index) {
                 Size size = MediaQuery.of(context).size;
 
@@ -131,9 +139,9 @@ class HomeView extends StatelessWidget {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: pokedex![index],
+                    pokemon: controller.pokedex!.value![index],
                     setFavorite: (value) {
-                      setFavorite!(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );
@@ -142,13 +150,13 @@ class HomeView extends StatelessWidget {
   Widget _pokemonWidget() {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: pokemons!.isEmpty
+      child: controller.pokemons!.value!.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Nenhum pokémon avistado ainda!",
+                    "Nenhum pokémon avistado ainda",
                     style: tsHeading2,
                     textAlign: TextAlign.center,
                   ),
@@ -161,7 +169,7 @@ class HomeView extends StatelessWidget {
                         color: Colors.red[400]),
                     child: IconButton(
                         onPressed: () {
-                          addPokemon!();
+                          addPokemon();
                         },
                         icon: const Icon(
                           Icons.add,
@@ -173,7 +181,7 @@ class HomeView extends StatelessWidget {
               ),
             )
           : ListView.builder(
-              itemCount: pokemons!.length,
+              itemCount: controller.pokemons!.value!.length,
               itemBuilder: (context, index) {
                 Size size = MediaQuery.of(context).size;
 
@@ -181,9 +189,9 @@ class HomeView extends StatelessWidget {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: pokemons![index],
+                    pokemon: controller.pokemons!.value![index],
                     setFavorite: (value) {
-                      setFavorite!(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );
@@ -192,13 +200,13 @@ class HomeView extends StatelessWidget {
   Widget _favoriteWidget() {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: favorites!.isEmpty
+      child: controller.favorites.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Nenhum pokémon favoritado ainda!",
+                    "Nenhum pokémon favoritado ainda",
                     style: tsHeading2,
                     textAlign: TextAlign.center,
                   ),
@@ -206,7 +214,7 @@ class HomeView extends StatelessWidget {
               ),
             )
           : ListView.builder(
-              itemCount: favorites!.length,
+              itemCount: controller.favorites.length,
               itemBuilder: (context, index) {
                 Size size = MediaQuery.of(context).size;
 
@@ -214,9 +222,9 @@ class HomeView extends StatelessWidget {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: favorites![index],
+                    pokemon: controller.favorites[index],
                     setFavorite: (value) {
-                      setFavorite!(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );

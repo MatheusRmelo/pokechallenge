@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/auth/auth_module.dart';
 import 'package:pokemon/app/modules/home/home_module.dart';
+import 'package:pokemon/app/modules/main/main_module.dart';
 
 class AppModule extends Module {
   // Provide a list of dependencies to inject into your project
@@ -11,6 +12,6 @@ class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ModuleRoute(Modular.initialRoute, module: AuthModule()),
-        ModuleRoute("/home", module: HomeModule()),
+        ModuleRoute("/home", module: MainModule()),
       ];
 }
