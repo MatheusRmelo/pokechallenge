@@ -17,6 +17,7 @@ class FirestoreRepository {
     var result = await _collectionPokedex
         .doc(_auth.currentUser!.uid)
         .collection("pokemons")
+        .orderBy("id")
         .get();
 
     result.docs.forEach((element) {
@@ -32,6 +33,7 @@ class FirestoreRepository {
     var result = await _collectionCatch
         .doc(_auth.currentUser!.uid)
         .collection("pokemons")
+        .orderBy("id")
         .get();
 
     result.docs.forEach((element) {

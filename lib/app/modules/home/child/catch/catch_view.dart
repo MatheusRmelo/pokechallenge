@@ -46,17 +46,20 @@ class CatchView extends StatelessWidget {
               height: size.height * 0.3,
               child: Image.network(pokemon!.image),
             ),
-            Row(
-              children: [
-                Text(
-                  pokemon!.name,
-                  style: tsHeading2,
-                ),
-                Text(
-                  " - N° ${pokemon!.id.toString()}",
-                  style: tsHeading2,
-                )
-              ],
+            Container(
+              width: size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pokemon!.name,
+                    style: tsHeading2,
+                  ),
+                  Text(
+                    "Chance de captura ${pokemon!.baseExperience >= 200 ? "díficil" : pokemon!.baseExperience >= 100 && pokemon!.baseExperience < 200 ? "média" : "fácil"}",
+                  )
+                ],
+              ),
             ),
             catchPoke
                 ? Column(

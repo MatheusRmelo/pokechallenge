@@ -11,26 +11,39 @@ Widget pokeCard({
 }) {
   return GestureDetector(
     onTap: () {
-      print(nextRouter);
       Modular.to.pushNamed(nextRouter, arguments: pokemon);
     },
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Colors.red,
+        color: Colors.red[200],
       ),
       margin: const EdgeInsets.only(top: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(
-            pokemon!.image,
-            width: 100,
-            height: 64,
+          Row(
+            children: [
+              Image.network(
+                pokemon!.image,
+                width: 100,
+                height: 64,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("N° ${pokemon.id.toString()}"),
+                  Text(pokemon.name)
+                ],
+              )
+            ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("N° ${pokemon.id.toString()}"), Text(pokemon.name)],
-          )
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite_outline,
+                color: Colors.white,
+              ))
         ],
       ),
     ),
