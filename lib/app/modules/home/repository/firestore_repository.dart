@@ -21,8 +21,13 @@ class FirestoreRepository {
         .get();
 
     result.docs.forEach((element) {
-      PokemonModel pokemon = PokemonModel(element['id'], element['name'],
-          element['image'], element['baseExperience']);
+      PokemonModel pokemon = PokemonModel(
+          element['id'],
+          element.id,
+          element['name'],
+          element['image'],
+          element['baseExperience'],
+          element['favorite']);
       pokedex.add(pokemon);
     });
     return pokedex;
@@ -37,8 +42,13 @@ class FirestoreRepository {
         .get();
 
     result.docs.forEach((element) {
-      PokemonModel pokemon = PokemonModel(element['id'], element['name'],
-          element['image'], element['baseExperience']);
+      PokemonModel pokemon = PokemonModel(
+          element['id'],
+          element.id,
+          element['name'],
+          element['image'],
+          element['baseExperience'],
+          element['favorite']);
       pokemons.add(pokemon);
     });
     return pokemons;
@@ -53,7 +63,8 @@ class FirestoreRepository {
       'name': pokemon.name,
       'image': pokemon.image,
       'id': pokemon.id,
-      "baseExperience": pokemon.baseExperience
+      "baseExperience": pokemon.baseExperience,
+      "favorite": pokemon.favorite,
     }).then((value) {
       return true;
     }).catchError((error) {
@@ -71,12 +82,43 @@ class FirestoreRepository {
       'image': pokemon.image,
       'id': pokemon.id,
       "baseExperience": pokemon.baseExperience,
-      "pokeball": pokeball
+      "pokeball": pokeball,
+      "favorite": pokemon.favorite,
     }).then((value) {
       return value.id;
     }).catchError((error) {
       return "";
     });
+    return result;
+  }
+
+  Future<bool> favoritePokemon(
+      String docCatch, String docDex, bool favorite) async {
+    var result = await _collectionCatch
+        .doc(_auth.currentUser!.uid)
+        .collection("pokemons")
+        .doc(docCatch)
+        .update({
+      "favorite": favorite,
+    }).then((value) {
+      return true;
+    }).catchError((error) {
+      return false;
+    });
+    if (result) {
+      result = await _collectionPokedex
+          .doc(_auth.currentUser!.uid)
+          .collection("pokemons")
+          .doc(docDex)
+          .update({
+        "favorite": favorite,
+      }).then((value) {
+        return true;
+      }).catchError((error) {
+        return false;
+      });
+    }
+
     return result;
   }
 

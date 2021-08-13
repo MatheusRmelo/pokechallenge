@@ -10,15 +10,19 @@ class HomeView extends StatelessWidget {
       this.addPokemon,
       this.loading = true,
       this.pokedex,
-      this.pokemons})
+      this.pokemons,
+      this.favorites,
+      this.setFavorite})
       : super(key: key);
 
   final Function? logout;
   final Function? addPokemon;
+  final Function? setFavorite;
 
   final bool loading;
   final List<PokemonModel>? pokedex;
   final List<PokemonModel>? pokemons;
+  final List<PokemonModel>? favorites;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     _pokedexWidget(),
                     _pokemonWidget(),
-                    const Icon(Icons.directions_bike),
+                    _favoriteWidget(),
                   ],
                 ),
           floatingActionButton: pokedex!.isNotEmpty
@@ -125,14 +129,17 @@ class HomeView extends StatelessWidget {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: pokedex![index]);
+                    pokemon: pokedex![index],
+                    setFavorite: (value) {
+                      setFavorite!(value);
+                    });
               }),
     );
   }
 
   Widget _pokemonWidget() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: pokemons!.isEmpty
           ? Center(
               child: Column(
@@ -172,7 +179,43 @@ class HomeView extends StatelessWidget {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: pokemons![index]);
+                    pokemon: pokemons![index],
+                    setFavorite: (value) {
+                      setFavorite!(value);
+                    });
+              }),
+    );
+  }
+
+  Widget _favoriteWidget() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: favorites!.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Nenhum pokémon favoritado ainda!",
+                    style: tsHeading2,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: favorites!.length,
+              itemBuilder: (context, index) {
+                Size size = MediaQuery.of(context).size;
+
+                return pokeCard(
+                    fullWidth: size.width,
+                    fullHeight: size.height,
+                    index: index,
+                    pokemon: favorites![index],
+                    setFavorite: (value) {
+                      setFavorite!(value);
+                    });
               }),
     );
   }

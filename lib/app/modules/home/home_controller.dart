@@ -17,6 +17,7 @@ class _HomeControlllerState extends State<HomeControlller> {
   bool loading = true;
   List<PokemonModel> pokedex = [];
   List<PokemonModel> pokemons = [];
+  List<PokemonModel> favorites = [];
 
   @override
   void initState() {
@@ -30,9 +31,16 @@ class _HomeControlllerState extends State<HomeControlller> {
     });
     List<PokemonModel> newPokedex = await repository.getMyPokedex();
     List<PokemonModel> newPokemons = await repository.getMyPokemons();
+    List<PokemonModel> newFavorites = [];
+    newPokedex.forEach((element) {
+      if (element.favorite) {
+        newFavorites.add(element);
+      }
+    });
     setState(() {
       pokedex = newPokedex;
       pokemons = newPokemons;
+      favorites = newFavorites;
       loading = false;
     });
   }
@@ -47,6 +55,32 @@ class _HomeControlllerState extends State<HomeControlller> {
     });
   }
 
+  void setFavorite(PokemonModel pokemon) async {
+    String docCatch = "";
+    String docDex = "";
+    bool favorite = !pokemon.favorite;
+    List<PokemonModel> newPokemons = pokemons;
+    List<PokemonModel> newPokedex = pokedex;
+
+    newPokemons.forEach((element) {
+      if (element.id == pokemon.id) {
+        docCatch = element.doc;
+        element.favorite = favorite;
+      }
+    });
+    newPokedex.forEach((element) {
+      if (element.id == pokemon.id) {
+        docDex = element.doc;
+        element.favorite = favorite;
+      }
+    });
+    setState(() {
+      pokedex = newPokedex;
+      pokemons = newPokemons;
+    });
+    await repository.favoritePokemon(docCatch, docDex, favorite);
+  }
+
   @override
   Widget build(BuildContext context) {
     return HomeView(
@@ -55,6 +89,8 @@ class _HomeControlllerState extends State<HomeControlller> {
       logout: logout,
       pokedex: pokedex,
       pokemons: pokemons,
+      favorites: favorites,
+      setFavorite: setFavorite,
     );
   }
 }

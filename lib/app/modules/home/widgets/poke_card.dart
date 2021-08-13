@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
-Widget pokeCard({
-  int index = 0,
-  String nextRouter = "details",
-  PokemonModel? pokemon,
-  double fullWidth = 60,
-  double fullHeight = 60,
-}) {
+Widget pokeCard(
+    {int index = 0,
+    String nextRouter = "details",
+    PokemonModel? pokemon,
+    double fullWidth = 60,
+    double fullHeight = 60,
+    Function? setFavorite}) {
   return GestureDetector(
     onTap: () {
       Modular.to.pushNamed(nextRouter, arguments: pokemon);
@@ -16,7 +16,7 @@ Widget pokeCard({
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Colors.red[200],
+        color: Colors.blue[50],
       ),
       margin: const EdgeInsets.only(top: 16),
       child: Row(
@@ -39,10 +39,12 @@ Widget pokeCard({
             ],
           ),
           IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.favorite_outline,
-                color: Colors.white,
+              onPressed: () {
+                setFavorite!(pokemon);
+              },
+              icon: Icon(
+                pokemon.favorite ? Icons.favorite : Icons.favorite_outline,
+                color: pokemon.favorite ? Colors.red : Colors.white,
               ))
         ],
       ),

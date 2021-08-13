@@ -11,8 +11,13 @@ class PokeApiRepository {
       try {
         var result = await _dio.get("pokemon/$search");
         var data = result.data;
-        PokemonModel pokemon = PokemonModel(data['id'], data['name'],
-            data['sprites']['front_default'], data['base_experience']);
+        PokemonModel pokemon = PokemonModel(
+            data['id'],
+            data['id'].toString(),
+            data['name'],
+            data['sprites']['front_default'],
+            data['base_experience'],
+            false);
         pokemons.add(pokemon);
       } catch (e) {
         print(e);
