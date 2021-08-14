@@ -11,9 +11,9 @@ abstract class _MainControllerBase with Store {
   final PokeApiRepository pokeapi;
 
   @observable
-  ObservableFuture<List<PokemonModel>>? pokedex;
+  List<PokemonModel> pokedex = [];
   @observable
-  ObservableFuture<List<PokemonModel>>? pokemons;
+  List<PokemonModel> pokemons = [];
   @observable
   List<PokemonModel> favorites = [];
 
@@ -23,10 +23,11 @@ abstract class _MainControllerBase with Store {
   _MainControllerBase(this.firestore, this.pokeapi) {
     getPokemons();
   }
-
+  @action
   Future<bool> getPokemons() async {
-    pokedex = firestore.getMyPokedex().asObservable();
-    pokemons = firestore.getMyPokemons().asObservable();
+    pokedex = await firestore.getMyPokedex();
+    pokemons = await firestore.getMyPokemons();
+    print(pokedex);
     // List<PokemonModel> newFavorites = [];
     // newPokedex.forEach((element) {
     //   if (element.favorite) {
@@ -40,39 +41,38 @@ abstract class _MainControllerBase with Store {
   }
 
   @action
-  void discoveryPokemon(PokemonModel pokemon) {
-    pokedex =
-        firestore.discoveryPokemon2(pokemon, pokemons!.value!).asObservable();
+  Future<void> discoveryPokemon(PokemonModel pokemon) async {
+    pokedex = await firestore.discoveryPokemon2(pokemon, pokedex);
   }
 
   void favoritePokemon(PokemonModel pokemon) async {
-    String docCatch = "";
-    String docDex = "";
-    bool favorite = pokemon.favorite;
-    List<PokemonModel>? newPokemons = pokemons!.value;
-    List<PokemonModel>? newPokedex = pokedex!.value;
-    List<PokemonModel> newFavorites = favorites;
+    // String docCatch = "";
+    // String docDex = "";
+    // bool favorite = pokemon.favorite;
+    // List<PokemonModel>? newPokemons = pokemons.value;
+    // List<PokemonModel>? newPokedex = pokedex.value;
+    // List<PokemonModel> newFavorites = favorites;
 
-    newPokemons!.forEach((element) {
-      if (element.id == pokemon.id) {
-        docCatch = element.doc;
-        element.favorite = favorite;
-      }
-    });
-    newPokedex!.forEach((element) {
-      if (element.id == pokemon.id) {
-        docDex = element.doc;
-        element.favorite = favorite;
-      }
-    });
-    if (favorite) {
-      newFavorites.add(pokemon);
-    } else {
-      newFavorites.remove(pokemon);
-    }
+    // newPokemons!.forEach((element) {
+    //   if (element.id == pokemon.id) {
+    //     docCatch = element.doc;
+    //     element.favorite = favorite;
+    //   }
+    // });
+    // newPokedex!.forEach((element) {
+    //   if (element.id == pokemon.id) {
+    //     docDex = element.doc;
+    //     element.favorite = favorite;
+    //   }
+    // });
+    // if (favorite) {
+    //   newFavorites.add(pokemon);
+    // } else {
+    //   newFavorites.remove(pokemon);
+    // }
 
-    favorites = newFavorites;
-    await firestore.favoritePokemon(docCatch, docDex, favorite);
+    // favorites = newFavorites;
+    // await firestore.favoritePokemon(docCatch, docDex, favorite);
   }
 
   void setPokemons(value) => pokemons = value;

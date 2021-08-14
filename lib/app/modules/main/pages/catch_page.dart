@@ -31,6 +31,7 @@ class _CatchPageState extends State<CatchPage> {
   @override
   void initState() {
     super.initState();
+    print("IS HERE");
     controller.discoveryPokemon(widget.pokemon!);
   }
 

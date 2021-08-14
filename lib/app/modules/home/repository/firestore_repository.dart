@@ -75,6 +75,7 @@ class FirestoreRepository {
 
   Future<List<PokemonModel>> discoveryPokemon2(
       PokemonModel? pokemon, List<PokemonModel> currentPokemons) async {
+    List<PokemonModel> newPokedex = currentPokemons;
     await _collectionPokedex
         .doc(_auth.currentUser!.uid)
         .collection("pokemons")
@@ -86,15 +87,15 @@ class FirestoreRepository {
       "baseExperience": pokemon.baseExperience,
       "favorite": pokemon.favorite,
     }).then((value) {
-      currentPokemons.add(pokemon);
+      newPokedex.add(pokemon);
       return true;
     }).catchError((error) {
       return false;
     });
     print("_-------------------------");
-    print(currentPokemons);
+    print(newPokedex);
     print("-------------------------------");
-    return currentPokemons;
+    return newPokedex;
   }
 
   Future<String> saveCatch(PokemonModel? pokemon, String pokeball) async {

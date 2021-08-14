@@ -1,5 +1,5 @@
 class PokemonModel {
-  final int id;
+  int id;
   final String doc;
   final String name;
   final String image;

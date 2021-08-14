@@ -1,48 +1,35 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:pokemon/app/modules/home/home_view.dart';
-import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
-import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
-import 'package:pokemon/app/modules/home/widgets/poke_card.dart';
-import 'package:pokemon/app/modules/main/main_controller.dart';
+import 'package:pokemon/app/modules/home2/widgets/pokemon_card.dart';
+import 'package:pokemon/app/modules/home2/home_controller.dart';
 import 'package:pokemon/utils/texts.dart';
 
-class MainWidget extends StatefulWidget {
-  const MainWidget({Key? key}) : super(key: key);
+class HomeWidget extends StatefulWidget {
+  const HomeWidget({Key? key}) : super(key: key);
 
   @override
-  _MainWidgetState createState() => _MainWidgetState();
+  _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _MainWidgetState extends State<MainWidget> {
-  MainController controller = Modular.get<MainController>();
+class _HomeWidgetState extends State<HomeWidget> {
+  final controller = Modular.get<HomeController>();
 
-  void addPokemon() {
-    Modular.to.pushNamed("discovery");
-  }
-
-  void logout() {
-    FirebaseAuth.instance.signOut().then((value) {
-      Modular.to.navigate("/auth");
-    });
+  void initState() {
+    super.initState();
+    controller.getPokemons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
-      print("INSIDE");
       return DefaultTabController(
           length: 3,
           child: Scaffold(
             appBar: AppBar(
               actions: [
                 IconButton(
-                    onPressed: () {
-                      logout();
-                    },
-                    icon: Icon(Icons.logout))
+                    onPressed: controller.logout, icon: Icon(Icons.logout))
               ],
               bottom: TabBar(
                 tabs: [
@@ -73,7 +60,7 @@ class _MainWidgetState extends State<MainWidget> {
                 ],
               ),
             ),
-            body: controller.pokedex == null || controller.pokedex == null
+            body: controller.loading
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
@@ -89,13 +76,7 @@ class _MainWidgetState extends State<MainWidget> {
                     ? FloatingActionButton(
                         backgroundColor: Colors.red[400],
                         child: Icon(Icons.add),
-                        onPressed: () {
-                          var pokemon = controller.pokedex[0];
-                          pokemon.id = 56;
-                          controller.discoveryPokemon(pokemon);
-                          print("HERE");
-                          //addPokemon();
-                        },
+                        onPressed: controller.addPokemon,
                       )
                     : Container(),
           ));
@@ -123,9 +104,7 @@ class _MainWidgetState extends State<MainWidget> {
                         borderRadius: BorderRadius.circular(32),
                         color: Colors.red[400]),
                     child: IconButton(
-                        onPressed: () {
-                          addPokemon();
-                        },
+                        onPressed: controller.addPokemon,
                         icon: const Icon(
                           Icons.add,
                           color: Colors.white,
@@ -145,7 +124,7 @@ class _MainWidgetState extends State<MainWidget> {
                     index: index,
                     pokemon: controller.pokedex[index],
                     setFavorite: (value) {
-                      controller.favoritePokemon(value);
+                      //controller.favoritePokemon(value);
                     });
               }),
     );
@@ -154,7 +133,7 @@ class _MainWidgetState extends State<MainWidget> {
   Widget _pokemonWidget() {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: controller.pokemons.isEmpty
+      child: controller.catches.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -172,9 +151,7 @@ class _MainWidgetState extends State<MainWidget> {
                         borderRadius: BorderRadius.circular(32),
                         color: Colors.red[400]),
                     child: IconButton(
-                        onPressed: () {
-                          addPokemon();
-                        },
+                        onPressed: controller.addPokemon,
                         icon: const Icon(
                           Icons.add,
                           color: Colors.white,
@@ -185,7 +162,7 @@ class _MainWidgetState extends State<MainWidget> {
               ),
             )
           : ListView.builder(
-              itemCount: controller.pokemons.length,
+              itemCount: controller.catches.length,
               itemBuilder: (context, index) {
                 Size size = MediaQuery.of(context).size;
 
@@ -193,9 +170,9 @@ class _MainWidgetState extends State<MainWidget> {
                     fullWidth: size.width,
                     fullHeight: size.height,
                     index: index,
-                    pokemon: controller.pokemons[index],
+                    pokemon: controller.catches[index],
                     setFavorite: (value) {
-                      controller.favoritePokemon(value);
+                      //controller.favoritePokemon(value);
                     });
               }),
     );
@@ -228,7 +205,7 @@ class _MainWidgetState extends State<MainWidget> {
                     index: index,
                     pokemon: controller.favorites[index],
                     setFavorite: (value) {
-                      controller.favoritePokemon(value);
+                      //controller.favoritePokemon(value);
                     });
               }),
     );
