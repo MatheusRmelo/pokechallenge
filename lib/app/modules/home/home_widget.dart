@@ -22,6 +22,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Observer(builder: (context) {
       return DefaultTabController(
           length: 3,
@@ -68,7 +69,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     children: [
                       _pokedexWidget(),
                       _pokemonWidget(),
-                      _favoriteWidget(),
+                      _favoriteWidget(size.height, size.width),
                     ],
                   ),
             floatingActionButton:
@@ -178,36 +179,69 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Widget _favoriteWidget() {
+  Widget _favoriteWidget(double height, double width) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: controller.favorites.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.all(16),
+        height: height,
+        width: width,
+        child: controller.favorites.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nenhum pokémon favoritado ainda",
+                      style: tsHeading2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : Column(
                 children: [
-                  Text(
-                    "Nenhum pokémon favoritado ainda",
-                    style: tsHeading2,
-                    textAlign: TextAlign.center,
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset.fromDirection(1, 1),
+                              spreadRadius: 0),
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8)),
+                    margin: EdgeInsets.all(16),
+                    child: TextField(
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(16),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            hintText: 'Pesquise pelo nome',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            suffixIcon: Icon(
+                              Icons.search,
+                              size: 32,
+                            )),
+                        onChanged: controller.searchFavorites),
                   ),
-                ],
-              ),
-            )
-          : ListView.builder(
-              itemCount: controller.favorites.length,
-              itemBuilder: (context, index) {
-                Size size = MediaQuery.of(context).size;
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: controller.favorites.length,
+                        itemBuilder: (context, index) {
+                          Size size = MediaQuery.of(context).size;
 
-                return pokeCard(
-                    fullWidth: size.width,
-                    fullHeight: size.height,
-                    index: index,
-                    pokemon: controller.favorites[index],
-                    setFavorite: (value) {
-                      controller.favoritePokemon(value);
-                    });
-              }),
-    );
+                          return pokeCard(
+                              fullWidth: size.width,
+                              fullHeight: size.height,
+                              index: index,
+                              pokemon: controller.favorites[index],
+                              setFavorite: (value) {
+                                controller.favoritePokemon(value);
+                              });
+                        }),
+                  )
+                ],
+              ));
   }
 }

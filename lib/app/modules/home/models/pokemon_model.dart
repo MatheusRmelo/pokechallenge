@@ -19,7 +19,7 @@ class PokemonModel {
   get id => _id;
   get doc => _doc;
 
-  get name => _name;
+  String get name => _name;
   get image => _image;
   get baseExperience => _baseExperience;
   bool get favorite => _favorite;

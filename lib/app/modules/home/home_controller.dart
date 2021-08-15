@@ -19,6 +19,7 @@ abstract class _HomeControllerBase with Store {
   List<PokemonModel> favorites = [];
   @observable
   bool loading = true;
+
   @action
   Future<bool> getPokemons() async {
     loading = true;
@@ -78,5 +79,25 @@ abstract class _HomeControllerBase with Store {
     catches = newCatches;
     favorites = newFavorites;
     await repository.favoritePokemon(docCatch, docDex, favorite);
+  }
+
+  @action
+  void searchFavorites(String search) {
+    List<PokemonModel> newFavorites = [];
+    if (search != "") {
+      favorites.forEach((element) {
+        if (element.name.contains(search)) {
+          newFavorites.add(element);
+        }
+      });
+    } else {
+      pokedex.forEach((element) {
+        if (element.favorite) {
+          newFavorites.add(element);
+        }
+      });
+    }
+
+    favorites = newFavorites;
   }
 }
