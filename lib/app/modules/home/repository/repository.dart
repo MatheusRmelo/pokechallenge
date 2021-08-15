@@ -1,7 +1,7 @@
-import 'package:pokemon/app/modules/home2/models/pokemon_model.dart';
-import 'package:pokemon/app/modules/home2/repository/catch_firestore_provider.dart';
-import 'package:pokemon/app/modules/home2/repository/pokedex_firestore_provider.dart';
-import 'package:pokemon/app/modules/home2/repository/pokemon_api_provider.dart';
+import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
+import 'package:pokemon/app/modules/home/repository/catch_firestore_provider.dart';
+import 'package:pokemon/app/modules/home/repository/pokedex_firestore_provider.dart';
+import 'package:pokemon/app/modules/home/repository/pokemon_api_provider.dart';
 
 class HomeRepository {
   final pokemonApiProvider = PokemonApiProvider();

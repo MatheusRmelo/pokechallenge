@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pokemon/app/modules/home2/models/pokemon_model.dart';
+import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
 class PokedexFirestoreProvider {
   CollectionReference _collectionPokedex =

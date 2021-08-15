@@ -1,48 +1,40 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:pokemon/app/modules/home/home_view.dart';
+import 'package:mobx/mobx.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
-import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
+import 'package:pokemon/app/modules/home/repository/repository.dart';
+part 'home_controller.g.dart';
 
-class HomeControlller extends StatefulWidget {
-  const HomeControlller({Key? key}) : super(key: key);
+class HomeController = _HomeControllerBase with _$HomeController;
 
-  @override
-  _HomeControlllerState createState() => _HomeControlllerState();
-}
+abstract class _HomeControllerBase with Store {
+  final HomeRepository repository;
 
-class _HomeControlllerState extends State<HomeControlller> {
-  FirestoreRepository repository = Modular.get<FirestoreRepository>();
-  bool loading = true;
-  List<PokemonModel> pokedex = [];
-  List<PokemonModel> pokemons = [];
-  List<PokemonModel> favorites = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getPokemons();
-  }
-
-  void getPokemons() async {
-    setState(() {
-      loading = true;
-    });
-    List<PokemonModel> newPokedex = await repository.getMyPokedex();
-    List<PokemonModel> newPokemons = await repository.getMyPokemons();
+  _HomeControllerBase(this.repository);
+  @observable
+  List<PokemonModel> _pokedex = [];
+  @observable
+  List<PokemonModel> _catches = [];
+  @observable
+  List<PokemonModel> _favorites = [];
+  @observable
+  bool _loading = true;
+  @action
+  Future<bool> getPokemons() async {
+    loading = true;
+    List<PokemonModel> newPokedex = await repository.fetchMyPokedex();
+    List<PokemonModel> newCatches = await repository.fetchMyCatches();
     List<PokemonModel> newFavorites = [];
     newPokedex.forEach((element) {
       if (element.favorite) {
         newFavorites.add(element);
       }
     });
-    setState(() {
-      pokedex = newPokedex;
-      pokemons = newPokemons;
-      favorites = newFavorites;
-      loading = false;
-    });
+    pokedex = newPokedex;
+    catches = newCatches;
+    favorites = newFavorites;
+    loading = false;
+    return true;
   }
 
   void addPokemon() {
@@ -55,48 +47,15 @@ class _HomeControlllerState extends State<HomeControlller> {
     });
   }
 
-  void setFavorite(PokemonModel pokemon) async {
-    String docCatch = "";
-    String docDex = "";
-    bool favorite = !pokemon.favorite;
-    List<PokemonModel> newPokemons = pokemons;
-    List<PokemonModel> newPokedex = pokedex;
-    List<PokemonModel> newFavorites = favorites;
+  void set loading(value) => _loading = value;
+  get loading => _loading;
 
-    newPokemons.forEach((element) {
-      if (element.id == pokemon.id) {
-        docCatch = element.doc;
-        element.favorite = favorite;
-      }
-    });
-    newPokedex.forEach((element) {
-      if (element.id == pokemon.id) {
-        docDex = element.doc;
-        element.favorite = favorite;
-      }
-    });
-    if (favorite) {
-      newFavorites.add(pokemon);
-    } else {
-      newFavorites.remove(pokemon);
-    }
-    setState(() {
-      pokedex = newPokedex;
-      pokemons = newPokemons;
-    });
-    await repository.favoritePokemon(docCatch, docDex, favorite);
-  }
+  void set pokedex(value) => _pokedex = value;
+  get pokedex => _pokedex;
 
-  @override
-  Widget build(BuildContext context) {
-    return HomeView(
-      addPokemon: addPokemon,
-      loading: loading,
-      logout: logout,
-      pokedex: pokedex,
-      pokemons: pokemons,
-      favorites: favorites,
-      setFavorite: setFavorite,
-    );
-  }
+  void set catches(value) => _catches = value;
+  get catches => _catches;
+
+  void set favorites(value) => _favorites = value;
+  get favorites => _favorites;
 }

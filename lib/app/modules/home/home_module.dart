@@ -1,27 +1,32 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/child/catch/catch_controller.dart';
-import 'package:pokemon/app/modules/home/child/details/details_controller.dart';
+import 'package:pokemon/app/modules/home/child/details/details_page.dart';
 import 'package:pokemon/app/modules/home/child/discovery/discovery_controller.dart';
 import 'package:pokemon/app/modules/home/home_controller.dart';
-import 'package:pokemon/app/modules/home/repository/firestore_repository.dart';
-import 'package:pokemon/app/modules/home/repository/pokeapi_repository.dart';
+import 'package:pokemon/app/modules/home/home_widget.dart';
+import 'package:pokemon/app/modules/home/repository/repository.dart';
+import 'package:pokemon/app/modules/home/child/catch/catch_page.dart';
+import 'package:pokemon/app/modules/home/child/discovery/discovery_page.dart';
 
 class HomeModule extends Module {
   @override
-  List<Bind> get binds =>
-      [Bind((i) => PokeApiRepository()), Bind((i) => FirestoreRepository())];
+  List<Bind> get binds => [
+        Bind((i) => HomeController(i.get())),
+        Bind((i) => DiscoveryController(i.get())),
+        Bind((i) => CatchController(i.get())),
+        Bind((i) => HomeRepository()),
+      ];
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, args) => const HomeControlller()),
-        ChildRoute('/discovery',
-            child: (_, args) => const DiscoveryController()),
+        ChildRoute('/', child: (_, args) => const HomeWidget()),
+        ChildRoute('/discovery', child: (_, args) => DiscoveryPage()),
         ChildRoute('/details',
-            child: (_, args) => DetailsController(
+            child: (_, args) => DetailsPage(
                   pokemon: args.data,
                 )),
         ChildRoute('/catch',
-            child: (_, args) => CatchController(
+            child: (_, args) => CatchPage(
                   pokemon: args.data,
                 )),
       ];

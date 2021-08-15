@@ -1,33 +1,25 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/models/pokeball_model.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/utils/texts.dart';
 
-class DetailsView extends StatelessWidget {
-  const DetailsView(
-      {Key? key,
-      this.pokemon,
-      this.catchPoke = false,
-      this.pokeball,
-      this.status = "",
-      this.setObs,
-      this.saveObs,
-      this.setPokeball,
-      this.goCatch})
-      : super(key: key);
+class DetailsPage extends StatefulWidget {
+  const DetailsPage({Key? key, PokemonModel? this.pokemon}) : super(key: key);
 
   final PokemonModel? pokemon;
-  final bool catchPoke;
-  final PokeballModel? pokeball;
-  final String status;
-  final Function? setObs;
-  final Function? saveObs;
-  final Function? setPokeball;
-  final Function? goCatch;
 
+  @override
+  _DetailsPageState createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    PokemonModel? pokemon = widget.pokemon;
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -49,11 +41,11 @@ class DetailsView extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  pokemon!.name,
+                  pokemon.name,
                   style: tsHeading2,
                 ),
                 Text(
-                  " - N° ${pokemon!.id.toString()}",
+                  " - N° ${pokemon.id.toString()}",
                   style: tsHeading2,
                 )
               ],

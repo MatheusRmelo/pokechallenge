@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:pokemon/app/modules/home2/models/pokemon_model.dart';
+import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
 Widget pokeCard(
     {int index = 0,
