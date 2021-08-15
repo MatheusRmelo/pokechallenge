@@ -12,13 +12,13 @@ abstract class _HomeControllerBase with Store {
 
   _HomeControllerBase(this.repository);
   @observable
-  List<PokemonModel> _pokedex = [];
+  List<PokemonModel> pokedex = [];
   @observable
-  List<PokemonModel> _catches = [];
+  List<PokemonModel> catches = [];
   @observable
-  List<PokemonModel> _favorites = [];
+  List<PokemonModel> favorites = [];
   @observable
-  bool _loading = true;
+  bool loading = true;
   @action
   Future<bool> getPokemons() async {
     loading = true;
@@ -47,15 +47,36 @@ abstract class _HomeControllerBase with Store {
     });
   }
 
-  void set loading(value) => _loading = value;
-  get loading => _loading;
+  @action
+  Future<void> favoritePokemon(PokemonModel pokemon) async {
+    print(pokemon);
+    String docCatch = "";
+    String docDex = "";
+    bool favorite = !pokemon.favorite;
+    List<PokemonModel> newCatches = catches;
+    List<PokemonModel> newPokedex = pokedex;
+    List<PokemonModel> newFavorites = favorites;
 
-  void set pokedex(value) => _pokedex = value;
-  get pokedex => _pokedex;
-
-  void set catches(value) => _catches = value;
-  get catches => _catches;
-
-  void set favorites(value) => _favorites = value;
-  get favorites => _favorites;
+    newCatches.forEach((element) {
+      if (element.id == pokemon.id) {
+        docCatch = element.doc;
+        element.favorite = favorite;
+      }
+    });
+    newPokedex.forEach((element) {
+      if (element.id == pokemon.id) {
+        docDex = element.doc;
+        element.favorite = favorite;
+      }
+    });
+    if (favorite) {
+      newFavorites.add(pokemon);
+    } else {
+      newFavorites.remove(pokemon);
+    }
+    pokedex = newPokedex;
+    catches = newCatches;
+    favorites = newFavorites;
+    await repository.favoritePokemon(docCatch, docDex, favorite);
+  }
 }

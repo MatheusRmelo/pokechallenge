@@ -98,7 +98,8 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                                       index: index,
                                       pokemon: pokemon,
                                       fullHeight: size.height,
-                                      fullWidth: size.width);
+                                      fullWidth: size.width,
+                                      setFavorite: () {});
                                 },
                               ),
                             ))

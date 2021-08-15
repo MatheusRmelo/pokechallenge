@@ -124,7 +124,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     index: index,
                     pokemon: controller.pokedex[index],
                     setFavorite: (value) {
-                      //controller.favoritePokemon(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );
@@ -172,7 +172,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     index: index,
                     pokemon: controller.catches[index],
                     setFavorite: (value) {
-                      //controller.favoritePokemon(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );
@@ -205,7 +205,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     index: index,
                     pokemon: controller.favorites[index],
                     setFavorite: (value) {
-                      //controller.favoritePokemon(value);
+                      controller.favoritePokemon(value);
                     });
               }),
     );

@@ -9,63 +9,63 @@ part of 'home_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
-  final _$_pokedexAtom = Atom(name: '_HomeControllerBase._pokedex');
+  final _$pokedexAtom = Atom(name: '_HomeControllerBase.pokedex');
 
   @override
-  List<PokemonModel> get _pokedex {
-    _$_pokedexAtom.reportRead();
-    return super._pokedex;
+  List<PokemonModel> get pokedex {
+    _$pokedexAtom.reportRead();
+    return super.pokedex;
   }
 
   @override
-  set _pokedex(List<PokemonModel> value) {
-    _$_pokedexAtom.reportWrite(value, super._pokedex, () {
-      super._pokedex = value;
+  set pokedex(List<PokemonModel> value) {
+    _$pokedexAtom.reportWrite(value, super.pokedex, () {
+      super.pokedex = value;
     });
   }
 
-  final _$_catchesAtom = Atom(name: '_HomeControllerBase._catches');
+  final _$catchesAtom = Atom(name: '_HomeControllerBase.catches');
 
   @override
-  List<PokemonModel> get _catches {
-    _$_catchesAtom.reportRead();
-    return super._catches;
+  List<PokemonModel> get catches {
+    _$catchesAtom.reportRead();
+    return super.catches;
   }
 
   @override
-  set _catches(List<PokemonModel> value) {
-    _$_catchesAtom.reportWrite(value, super._catches, () {
-      super._catches = value;
+  set catches(List<PokemonModel> value) {
+    _$catchesAtom.reportWrite(value, super.catches, () {
+      super.catches = value;
     });
   }
 
-  final _$_favoritesAtom = Atom(name: '_HomeControllerBase._favorites');
+  final _$favoritesAtom = Atom(name: '_HomeControllerBase.favorites');
 
   @override
-  List<PokemonModel> get _favorites {
-    _$_favoritesAtom.reportRead();
-    return super._favorites;
+  List<PokemonModel> get favorites {
+    _$favoritesAtom.reportRead();
+    return super.favorites;
   }
 
   @override
-  set _favorites(List<PokemonModel> value) {
-    _$_favoritesAtom.reportWrite(value, super._favorites, () {
-      super._favorites = value;
+  set favorites(List<PokemonModel> value) {
+    _$favoritesAtom.reportWrite(value, super.favorites, () {
+      super.favorites = value;
     });
   }
 
-  final _$_loadingAtom = Atom(name: '_HomeControllerBase._loading');
+  final _$loadingAtom = Atom(name: '_HomeControllerBase.loading');
 
   @override
-  bool get _loading {
-    _$_loadingAtom.reportRead();
-    return super._loading;
+  bool get loading {
+    _$loadingAtom.reportRead();
+    return super.loading;
   }
 
   @override
-  set _loading(bool value) {
-    _$_loadingAtom.reportWrite(value, super._loading, () {
-      super._loading = value;
+  set loading(bool value) {
+    _$loadingAtom.reportWrite(value, super.loading, () {
+      super.loading = value;
     });
   }
 
@@ -77,10 +77,22 @@ mixin _$HomeController on _HomeControllerBase, Store {
     return _$getPokemonsAsyncAction.run(() => super.getPokemons());
   }
 
+  final _$favoritePokemonAsyncAction =
+      AsyncAction('_HomeControllerBase.favoritePokemon');
+
+  @override
+  Future favoritePokemon(PokemonModel pokemon) {
+    return _$favoritePokemonAsyncAction
+        .run(() => super.favoritePokemon(pokemon));
+  }
+
   @override
   String toString() {
     return '''
-
+pokedex: ${pokedex},
+catches: ${catches},
+favorites: ${favorites},
+loading: ${loading}
     ''';
   }
 }

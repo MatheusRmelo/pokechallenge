@@ -15,11 +15,12 @@ class PokemonModel {
     _favorite = parsedJson['favorite'];
   }
 
+  void set favorite(bool value) => _favorite = value;
   get id => _id;
   get doc => _doc;
 
   get name => _name;
   get image => _image;
   get baseExperience => _baseExperience;
-  get favorite => _favorite;
+  bool get favorite => _favorite;
 }

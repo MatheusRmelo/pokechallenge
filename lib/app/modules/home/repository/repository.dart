@@ -1,5 +1,6 @@
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/app/modules/home/repository/catch_firestore_provider.dart';
+import 'package:pokemon/app/modules/home/repository/favorite_firestore_provider.dart';
 import 'package:pokemon/app/modules/home/repository/pokedex_firestore_provider.dart';
 import 'package:pokemon/app/modules/home/repository/pokemon_api_provider.dart';
 
@@ -7,6 +8,7 @@ class HomeRepository {
   final pokemonApiProvider = PokemonApiProvider();
   final catchFirestoreProvider = CatchFirestoreProvider();
   final pokedexFirestoreProvider = PokedexFirestoreProvider();
+  final favoriteFirestoreProvider = FavoriteFirestoreProvider();
 
   Future<List<PokemonModel>> fetchPokemons(String search) =>
       pokemonApiProvider.fetchPokemons(search);
@@ -25,4 +27,7 @@ class HomeRepository {
 
   Future<bool> saveObs(String doc, String obs) =>
       catchFirestoreProvider.saveObs(doc, obs);
+
+  Future<void> favoritePokemon(String docCatch, String docDex, bool favorite) =>
+      favoriteFirestoreProvider.favoritePokemon(docCatch, docDex, favorite);
 }

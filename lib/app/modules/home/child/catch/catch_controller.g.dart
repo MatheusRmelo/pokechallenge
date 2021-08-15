@@ -107,6 +107,20 @@ mixin _$CatchController on _CatchControllerBase, Store {
     return _$saveObsAsyncAction.run(() => super.saveObs());
   }
 
+  final _$_CatchControllerBaseActionController =
+      ActionController(name: '_CatchControllerBase');
+
+  @override
+  void reset() {
+    final _$actionInfo = _$_CatchControllerBaseActionController.startAction(
+        name: '_CatchControllerBase.reset');
+    try {
+      return super.reset();
+    } finally {
+      _$_CatchControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

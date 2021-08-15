@@ -8,7 +8,7 @@ Widget pokeCard(
     required PokemonModel pokemon,
     double fullWidth = 60,
     double fullHeight = 60,
-    Function? setFavorite}) {
+    required Function setFavorite}) {
   return GestureDetector(
     onTap: () {
       Modular.to.pushNamed(nextRouter, arguments: pokemon);
@@ -40,7 +40,7 @@ Widget pokeCard(
           ),
           IconButton(
               onPressed: () {
-                setFavorite!(pokemon);
+                setFavorite(pokemon);
               },
               icon: Icon(
                 pokemon.favorite ? Icons.favorite : Icons.favorite_outline,
