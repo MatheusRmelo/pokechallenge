@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokemon/app/modules/home/widgets/input_search.dart';
 import 'package:pokemon/app/modules/home/widgets/pokemon_card.dart';
 import 'package:pokemon/app/modules/home/home_controller.dart';
 import 'package:pokemon/utils/texts.dart';
@@ -69,7 +70,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     children: [
                       _pokedexWidget(),
                       _pokemonWidget(),
-                      _favoriteWidget(size.height, size.width),
+                      _favoriteWidget(),
                     ],
                   ),
             floatingActionButton:
@@ -86,104 +87,123 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Widget _pokedexWidget() {
     return Container(
-      padding: EdgeInsets.all(16),
-      child: controller.pokedex.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        padding: EdgeInsets.all(16),
+        child: controller.pokedex.isEmpty && controller.fullPokedex.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nenhum pokémon avistado ainda",
+                      style: tsHeading2,
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      width: 64,
+                      height: 64,
+                      margin: const EdgeInsets.only(top: 24),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          color: Colors.red[400]),
+                      child: IconButton(
+                          onPressed: controller.addPokemon,
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 32,
+                          )),
+                    )
+                  ],
+                ),
+              )
+            : Column(
                 children: [
-                  Text(
-                    "Nenhum pokémon avistado ainda",
-                    style: tsHeading2,
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    margin: const EdgeInsets.only(top: 24),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: Colors.red[400]),
-                    child: IconButton(
-                        onPressed: controller.addPokemon,
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 32,
-                        )),
-                  )
+                  inputSearch(controller.searchPokedex),
+                  controller.pokedex.length == 0
+                      ? Container(
+                          margin: EdgeInsets.only(top: 32),
+                          child: Text(
+                            "Pesquisa resultou em 0 resultados",
+                            style: tsHeading2,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                              itemCount: controller.pokedex.length,
+                              itemBuilder: (context, index) {
+                                Size size = MediaQuery.of(context).size;
+                                return pokeCard(
+                                    fullWidth: size.width,
+                                    fullHeight: size.height,
+                                    index: index,
+                                    pokemon: controller.pokedex[index],
+                                    setFavorite: (value) {
+                                      controller.favoritePokemon(value);
+                                    });
+                              }),
+                        )
                 ],
-              ),
-            )
-          : ListView.builder(
-              itemCount: controller.pokedex.length,
-              itemBuilder: (context, index) {
-                Size size = MediaQuery.of(context).size;
-                return pokeCard(
-                    fullWidth: size.width,
-                    fullHeight: size.height,
-                    index: index,
-                    pokemon: controller.pokedex[index],
-                    setFavorite: (value) {
-                      controller.favoritePokemon(value);
-                    });
-              }),
-    );
+              ));
   }
 
   Widget _pokemonWidget() {
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: controller.catches.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.all(16),
+        child: controller.catches.isEmpty && controller.fullCatches.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nenhum pokémon avistado ainda",
+                      style: tsHeading2,
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      width: 64,
+                      height: 64,
+                      margin: const EdgeInsets.only(top: 24),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          color: Colors.red[400]),
+                      child: IconButton(
+                          onPressed: controller.addPokemon,
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 32,
+                          )),
+                    )
+                  ],
+                ),
+              )
+            : Column(
                 children: [
-                  Text(
-                    "Nenhum pokémon avistado ainda",
-                    style: tsHeading2,
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    margin: const EdgeInsets.only(top: 24),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: Colors.red[400]),
-                    child: IconButton(
-                        onPressed: controller.addPokemon,
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 32,
-                        )),
+                  inputSearch(controller.searchCatches),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: controller.catches.length,
+                        itemBuilder: (context, index) {
+                          Size size = MediaQuery.of(context).size;
+
+                          return pokeCard(
+                              fullWidth: size.width,
+                              fullHeight: size.height,
+                              index: index,
+                              pokemon: controller.catches[index],
+                              setFavorite: (value) {
+                                controller.favoritePokemon(value);
+                              });
+                        }),
                   )
                 ],
-              ),
-            )
-          : ListView.builder(
-              itemCount: controller.catches.length,
-              itemBuilder: (context, index) {
-                Size size = MediaQuery.of(context).size;
-
-                return pokeCard(
-                    fullWidth: size.width,
-                    fullHeight: size.height,
-                    index: index,
-                    pokemon: controller.catches[index],
-                    setFavorite: (value) {
-                      controller.favoritePokemon(value);
-                    });
-              }),
-    );
+              ));
   }
 
-  Widget _favoriteWidget(double height, double width) {
+  Widget _favoriteWidget() {
     return Container(
         padding: const EdgeInsets.all(16),
-        height: height,
-        width: width,
         child: controller.favorites.isEmpty
             ? Center(
                 child: Column(
@@ -199,32 +219,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               )
             : Column(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 6,
-                              offset: Offset.fromDirection(1, 1),
-                              spreadRadius: 0),
-                        ],
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8)),
-                    margin: EdgeInsets.all(16),
-                    child: TextField(
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(16),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText: 'Pesquise pelo nome',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            suffixIcon: Icon(
-                              Icons.search,
-                              size: 32,
-                            )),
-                        onChanged: controller.searchFavorites),
-                  ),
+                  inputSearch(controller.searchFavorites),
                   Expanded(
                     child: ListView.builder(
                         itemCount: controller.favorites.length,

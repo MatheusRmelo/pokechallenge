@@ -13,8 +13,10 @@ abstract class _HomeControllerBase with Store {
   _HomeControllerBase(this.repository);
   @observable
   List<PokemonModel> pokedex = [];
+  List<PokemonModel> fullPokedex = [];
   @observable
   List<PokemonModel> catches = [];
+  List<PokemonModel> fullCatches = [];
   @observable
   List<PokemonModel> favorites = [];
   @observable
@@ -32,7 +34,9 @@ abstract class _HomeControllerBase with Store {
       }
     });
     pokedex = newPokedex;
+    fullPokedex = newPokedex;
     catches = newCatches;
+    fullCatches = newCatches;
     favorites = newFavorites;
     loading = false;
     return true;
@@ -79,6 +83,38 @@ abstract class _HomeControllerBase with Store {
     catches = newCatches;
     favorites = newFavorites;
     await repository.favoritePokemon(docCatch, docDex, favorite);
+  }
+
+  @action
+  void searchPokedex(String search) {
+    List<PokemonModel> newPokedex = [];
+    if (search != "") {
+      fullPokedex.forEach((element) {
+        if (element.name.contains(search)) {
+          newPokedex.add(element);
+        }
+      });
+    } else {
+      newPokedex = fullPokedex;
+    }
+
+    pokedex = newPokedex;
+  }
+
+  @action
+  void searchCatches(String search) {
+    List<PokemonModel> newCatches = [];
+    if (search != "") {
+      fullCatches.forEach((element) {
+        if (element.name.contains(search)) {
+          newCatches.add(element);
+        }
+      });
+    } else {
+      newCatches = fullCatches;
+    }
+
+    catches = newCatches;
   }
 
   @action
