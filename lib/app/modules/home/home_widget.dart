@@ -192,6 +192,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                               fullHeight: size.height,
                               index: index,
                               pokemon: controller.catches[index],
+                              catchPoke: true,
                               setFavorite: (value) {
                                 controller.favoritePokemon(value);
                               });

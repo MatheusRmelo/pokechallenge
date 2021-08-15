@@ -7,9 +7,14 @@ import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/utils/texts.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({Key? key, PokemonModel? this.pokemon}) : super(key: key);
+  const DetailsPage(
+      {Key? key,
+      required PokemonModel this.pokemon,
+      bool this.catchPoke = false})
+      : super(key: key);
 
-  final PokemonModel? pokemon;
+  final PokemonModel pokemon;
+  final bool catchPoke;
 
   @override
   _DetailsPageState createState() => _DetailsPageState();
@@ -36,7 +41,7 @@ class _DetailsPageState extends State<DetailsPage> {
               margin: EdgeInsets.only(bottom: 16),
               width: size.width,
               height: size.height * 0.3,
-              child: Image.network(pokemon!.image),
+              child: Image.network(pokemon.image),
             ),
             Row(
               children: [
@@ -47,9 +52,27 @@ class _DetailsPageState extends State<DetailsPage> {
                 Text(
                   " - N° ${pokemon.id.toString()}",
                   style: tsHeading2,
-                )
+                ),
               ],
             ),
+            widget.catchPoke
+                ? Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.grey)),
+                    margin: EdgeInsets.only(top: 16, bottom: 16),
+                    padding: EdgeInsets.only(left: 8),
+                    height: 100,
+                    width: size.width,
+                    child: TextFormField(
+                      onChanged: (text) {},
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Observações da captura"),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                    ),
+                  )
+                : Container()
           ],
         ),
       )),

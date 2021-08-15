@@ -8,6 +8,7 @@ Widget pokeCard(
     required PokemonModel pokemon,
     double fullWidth = 60,
     double fullHeight = 60,
+    bool catchPoke = false,
     required Function setFavorite}) {
   return GestureDetector(
     onTap: () {
