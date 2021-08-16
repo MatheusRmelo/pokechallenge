@@ -12,24 +12,29 @@ abstract class _DiscoveryControllerBase with Store {
   @observable
   Timer _timer = Timer(Duration(seconds: 1), () {});
   @observable
-  bool loading = true;
+  String _search = "";
+
+  @observable
+  bool loading = false;
   @observable
   List<PokemonModel> pokemons = [];
+
   @observable
-  String _search = "";
+  bool initialSearch = true;
 
   _DiscoveryControllerBase(this.repository);
 
   @action
   Future<void> searchPokemons() async {
-    loading = true;
     var newPokemons = await repository.fetchPokemons(search.toLowerCase());
     loading = false;
     pokemons = newPokemons;
   }
 
-  void set search(String value) {
+  set search(String value) {
     _search = value;
+    loading = true;
+    initialSearch = false;
     if (_timer.isActive) {
       _timer.cancel();
     }

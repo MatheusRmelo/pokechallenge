@@ -24,6 +24,21 @@ mixin _$DiscoveryController on _DiscoveryControllerBase, Store {
     });
   }
 
+  final _$_searchAtom = Atom(name: '_DiscoveryControllerBase._search');
+
+  @override
+  String get _search {
+    _$_searchAtom.reportRead();
+    return super._search;
+  }
+
+  @override
+  set _search(String value) {
+    _$_searchAtom.reportWrite(value, super._search, () {
+      super._search = value;
+    });
+  }
+
   final _$loadingAtom = Atom(name: '_DiscoveryControllerBase.loading');
 
   @override
@@ -54,18 +69,19 @@ mixin _$DiscoveryController on _DiscoveryControllerBase, Store {
     });
   }
 
-  final _$_searchAtom = Atom(name: '_DiscoveryControllerBase._search');
+  final _$initialSearchAtom =
+      Atom(name: '_DiscoveryControllerBase.initialSearch');
 
   @override
-  String get _search {
-    _$_searchAtom.reportRead();
-    return super._search;
+  bool get initialSearch {
+    _$initialSearchAtom.reportRead();
+    return super.initialSearch;
   }
 
   @override
-  set _search(String value) {
-    _$_searchAtom.reportWrite(value, super._search, () {
-      super._search = value;
+  set initialSearch(bool value) {
+    _$initialSearchAtom.reportWrite(value, super.initialSearch, () {
+      super.initialSearch = value;
     });
   }
 
@@ -81,7 +97,8 @@ mixin _$DiscoveryController on _DiscoveryControllerBase, Store {
   String toString() {
     return '''
 loading: ${loading},
-pokemons: ${pokemons}
+pokemons: ${pokemons},
+initialSearch: ${initialSearch}
     ''';
   }
 }

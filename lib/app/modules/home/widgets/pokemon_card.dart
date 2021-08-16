@@ -9,15 +9,12 @@ Widget pokeCard(
     double fullWidth = 60,
     double fullHeight = 60,
     bool catchPoke = false,
+    bool showFavorite = true,
     required Function setFavorite}) {
   return GestureDetector(
     onTap: () {
-      if (catchPoke) {
-        Modular.to.pushNamed(nextRouter,
-            arguments: {'pokemon': pokemon, 'catchPoke': catchPoke});
-      } else {
-        Modular.to.pushNamed(nextRouter, arguments: {'pokemon': pokemon});
-      }
+      Modular.to.pushNamed(nextRouter,
+          arguments: {'pokemon': pokemon, 'catchPoke': catchPoke});
     },
     child: Container(
       decoration: BoxDecoration(
@@ -44,14 +41,16 @@ Widget pokeCard(
               )
             ],
           ),
-          IconButton(
-              onPressed: () {
-                setFavorite(pokemon);
-              },
-              icon: Icon(
-                pokemon.favorite ? Icons.favorite : Icons.favorite_outline,
-                color: pokemon.favorite ? Colors.red : Colors.white,
-              ))
+          showFavorite
+              ? IconButton(
+                  onPressed: () {
+                    setFavorite(pokemon);
+                  },
+                  icon: Icon(
+                    pokemon.favorite ? Icons.favorite : Icons.favorite_outline,
+                    color: pokemon.favorite ? Colors.red : Colors.white,
+                  ))
+              : Container()
         ],
       ),
     ),

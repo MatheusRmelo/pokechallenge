@@ -24,33 +24,33 @@ mixin _$CatchController on _CatchControllerBase, Store {
     });
   }
 
-  final _$_obsAtom = Atom(name: '_CatchControllerBase._obs');
+  final _$obsAtom = Atom(name: '_CatchControllerBase.obs');
 
   @override
-  String get _obs {
-    _$_obsAtom.reportRead();
-    return super._obs;
+  String get obs {
+    _$obsAtom.reportRead();
+    return super.obs;
   }
 
   @override
-  set _obs(String value) {
-    _$_obsAtom.reportWrite(value, super._obs, () {
-      super._obs = value;
+  set obs(String value) {
+    _$obsAtom.reportWrite(value, super.obs, () {
+      super.obs = value;
     });
   }
 
-  final _$_pokeballAtom = Atom(name: '_CatchControllerBase._pokeball');
+  final _$pokeballAtom = Atom(name: '_CatchControllerBase.pokeball');
 
   @override
-  PokeballModel get _pokeball {
-    _$_pokeballAtom.reportRead();
-    return super._pokeball;
+  PokeballModel get pokeball {
+    _$pokeballAtom.reportRead();
+    return super.pokeball;
   }
 
   @override
-  set _pokeball(PokeballModel value) {
-    _$_pokeballAtom.reportWrite(value, super._pokeball, () {
-      super._pokeball = value;
+  set pokeball(PokeballModel value) {
+    _$pokeballAtom.reportWrite(value, super.pokeball, () {
+      super.pokeball = value;
     });
   }
 
@@ -125,6 +125,8 @@ mixin _$CatchController on _CatchControllerBase, Store {
   String toString() {
     return '''
 doc: ${doc},
+obs: ${obs},
+pokeball: ${pokeball},
 status: ${status},
 catchPoke: ${catchPoke}
     ''';

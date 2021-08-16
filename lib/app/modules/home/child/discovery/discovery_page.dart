@@ -72,18 +72,18 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                       controller.search = text;
                     }),
               ),
-              controller.pokemons == null
+              controller.loading
                   ? Container(
-                      child: Text("Pesquise o pokémon encontrado"),
+                      margin: EdgeInsets.only(top: 64),
+                      child: CircularProgressIndicator(),
                     )
-                  : controller.pokemons.length == 0
+                  : controller.initialSearch
                       ? Container(
-                          child: Text("Pokémon não encontrado"),
+                          child: Text("Pesquise o pokémon encontrado"),
                         )
-                      : controller.loading
+                      : controller.pokemons.length == 0
                           ? Container(
-                              margin: EdgeInsets.only(top: 64),
-                              child: CircularProgressIndicator(),
+                              child: Text("Pokémon não encontrado"),
                             )
                           : Expanded(
                               child: Container(
@@ -99,7 +99,8 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                                       pokemon: pokemon,
                                       fullHeight: size.height,
                                       fullWidth: size.width,
-                                      setFavorite: () {});
+                                      setFavorite: () {},
+                                      showFavorite: false);
                                 },
                               ),
                             ))

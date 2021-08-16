@@ -48,13 +48,12 @@ abstract class _HomeControllerBase with Store {
 
   void logout() {
     FirebaseAuth.instance.signOut().then((value) {
-      Modular.to.navigate("/auth");
+      Modular.to.navigate("/");
     });
   }
 
   @action
   Future<void> favoritePokemon(PokemonModel pokemon) async {
-    print(pokemon);
     String docCatch = "";
     String docDex = "";
     bool favorite = !pokemon.favorite;
@@ -70,7 +69,7 @@ abstract class _HomeControllerBase with Store {
     });
     newPokedex.forEach((element) {
       if (element.id == pokemon.id) {
-        docDex = element.doc;
+        docDex = element.id.toString();
         element.favorite = favorite;
       }
     });

@@ -86,6 +86,14 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
     return _$saveObsAsyncAction.run(() => super.saveObs(doc));
   }
 
+  final _$leavePokemonAsyncAction =
+      AsyncAction('_DetailsControllerBase.leavePokemon');
+
+  @override
+  Future<bool> leavePokemon(String doc) {
+    return _$leavePokemonAsyncAction.run(() => super.leavePokemon(doc));
+  }
+
   @override
   String toString() {
     return '''

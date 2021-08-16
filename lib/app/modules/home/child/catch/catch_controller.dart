@@ -17,9 +17,9 @@ abstract class _CatchControllerBase with Store {
   @observable
   String doc = "";
   @observable
-  String _obs = "";
+  String obs = "";
   @observable
-  PokeballModel _pokeball = PokeballModel("pokeball", 100);
+  PokeballModel pokeball = PokeballModel("pokeball", 100);
   @observable
   String status = "";
   @observable
@@ -48,6 +48,7 @@ abstract class _CatchControllerBase with Store {
         catchPoke = true;
         status = "Parabéns! Você capturou o ${pokemon.name}";
         List<PokemonModel> newCatches = controller.catches;
+        pokemon.doc = doc;
         newCatches.add(pokemon);
         controller.catches = newCatches;
       } else {
@@ -58,12 +59,6 @@ abstract class _CatchControllerBase with Store {
       status = "Sua ${pokeball.name} quebrou 😔";
     }
   }
-
-  void set obs(String value) => _obs = value;
-  String get obs => _obs;
-
-  void set pokeball(PokeballModel pokeball) => _pokeball = pokeball;
-  PokeballModel get pokeball => _pokeball;
 
   @action
   Future<void> saveObs() async {
@@ -77,8 +72,8 @@ abstract class _CatchControllerBase with Store {
   @action
   void reset() {
     doc = "";
-    _obs = "";
-    _pokeball = PokeballModel("pokeball", 100);
+    obs = "";
+    pokeball = PokeballModel("pokeball", 100);
     status = "";
     catchPoke = false;
   }

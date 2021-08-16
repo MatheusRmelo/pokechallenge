@@ -1,26 +1,23 @@
 class PokemonModel {
   late int _id;
-  late String _doc;
+  late String doc;
   late String _name;
   late String _image;
   late int _baseExperience;
-  late bool _favorite;
+  late bool favorite;
 
   PokemonModel.fromJson(Map<String, dynamic> parsedJson) {
     _id = parsedJson['id'];
-    _doc = parsedJson['doc'];
+    doc = parsedJson['doc'];
     _name = parsedJson['name'];
     _image = parsedJson['image'];
     _baseExperience = parsedJson['baseExperience'];
-    _favorite = parsedJson['favorite'];
+    favorite = parsedJson['favorite'];
   }
 
-  void set favorite(bool value) => _favorite = value;
   get id => _id;
-  get doc => _doc;
 
   String get name => _name;
   get image => _image;
   get baseExperience => _baseExperience;
-  bool get favorite => _favorite;
 }
