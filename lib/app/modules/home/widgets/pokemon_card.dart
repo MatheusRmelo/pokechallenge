@@ -48,7 +48,7 @@ Widget pokeCard(
                   },
                   icon: Icon(
                     pokemon.favorite ? Icons.favorite : Icons.favorite_outline,
-                    color: pokemon.favorite ? Colors.red : Colors.white,
+                    color: pokemon.favorite ? Colors.red : Colors.black,
                   ))
               : Container()
         ],
