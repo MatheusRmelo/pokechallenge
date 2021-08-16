@@ -20,13 +20,6 @@ class PokedexFirestoreProvider {
         'doc': element.id,
       };
       PokemonModel pokemon = PokemonModel.fromJson(json);
-      // PokemonModel pokemon = PokemonModel(
-      //     element['id'],
-      //     element.id,
-      //     element['name'],
-      //     element['image'],
-      //     element['baseExperience'],
-      //     element['favorite']);
       pokedex.add(pokemon);
     });
     return pokedex;
