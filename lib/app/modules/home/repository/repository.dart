@@ -5,29 +5,35 @@ import 'package:pokemon/app/modules/home/repository/pokedex_firestore_provider.d
 import 'package:pokemon/app/modules/home/repository/pokemon_api_provider.dart';
 
 class HomeRepository {
-  final pokemonApiProvider = PokemonApiProvider();
-  final catchFirestoreProvider = CatchFirestoreProvider();
-  final pokedexFirestoreProvider = PokedexFirestoreProvider();
-  final favoriteFirestoreProvider = FavoriteFirestoreProvider();
+  final _pokemonApiProvider = PokemonApiProvider();
+  final _catchFirestoreProvider = CatchFirestoreProvider();
+  final _pokedexFirestoreProvider = PokedexFirestoreProvider();
+  final _favoriteFirestoreProvider = FavoriteFirestoreProvider();
 
   Future<List<PokemonModel>> fetchPokemons(String search) =>
-      pokemonApiProvider.fetchPokemons(search);
+      _pokemonApiProvider.fetchPokemons(search);
 
   Future<List<PokemonModel>> fetchMyCatches() =>
-      catchFirestoreProvider.fetchMyCatches();
+      _catchFirestoreProvider.fetchMyCatches();
+
+  Future<String> fetchObsCatch(String doc) =>
+      _catchFirestoreProvider.fetchObsCatch(doc);
 
   Future<List<PokemonModel>> fetchMyPokedex() =>
-      pokedexFirestoreProvider.fetchMyPokedex();
+      _pokedexFirestoreProvider.fetchMyPokedex();
 
   Future<bool> discoveryPokemon(PokemonModel pokemon) =>
-      pokedexFirestoreProvider.discoveryPokemon(pokemon);
+      _pokedexFirestoreProvider.discoveryPokemon(pokemon);
 
   Future<String> saveCatch(PokemonModel pokemon, String pokeball) =>
-      catchFirestoreProvider.saveCatch(pokemon, pokeball);
+      _catchFirestoreProvider.saveCatch(pokemon, pokeball);
 
   Future<bool> saveObs(String doc, String obs) =>
-      catchFirestoreProvider.saveObs(doc, obs);
+      _catchFirestoreProvider.saveObs(doc, obs);
+
+  Future<bool> leavePokemon(String doc) =>
+      _catchFirestoreProvider.leavePokemon(doc);
 
   Future<void> favoritePokemon(String docCatch, String docDex, bool favorite) =>
-      favoriteFirestoreProvider.favoritePokemon(docCatch, docDex, favorite);
+      _favoriteFirestoreProvider.favoritePokemon(docCatch, docDex, favorite);
 }

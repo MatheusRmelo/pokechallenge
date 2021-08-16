@@ -81,9 +81,45 @@ mixin _$HomeController on _HomeControllerBase, Store {
       AsyncAction('_HomeControllerBase.favoritePokemon');
 
   @override
-  Future favoritePokemon(PokemonModel pokemon) {
+  Future<void> favoritePokemon(PokemonModel pokemon) {
     return _$favoritePokemonAsyncAction
         .run(() => super.favoritePokemon(pokemon));
+  }
+
+  final _$_HomeControllerBaseActionController =
+      ActionController(name: '_HomeControllerBase');
+
+  @override
+  void searchPokedex(String search) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.searchPokedex');
+    try {
+      return super.searchPokedex(search);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void searchCatches(String search) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.searchCatches');
+    try {
+      return super.searchCatches(search);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void searchFavorites(String search) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.searchFavorites');
+    try {
+      return super.searchFavorites(search);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

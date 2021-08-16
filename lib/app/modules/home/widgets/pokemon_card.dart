@@ -12,7 +12,12 @@ Widget pokeCard(
     required Function setFavorite}) {
   return GestureDetector(
     onTap: () {
-      Modular.to.pushNamed(nextRouter, arguments: pokemon);
+      if (catchPoke) {
+        Modular.to.pushNamed(nextRouter,
+            arguments: {'pokemon': pokemon, 'catchPoke': catchPoke});
+      } else {
+        Modular.to.pushNamed(nextRouter, arguments: {'pokemon': pokemon});
+      }
     },
     child: Container(
       decoration: BoxDecoration(

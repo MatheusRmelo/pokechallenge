@@ -26,6 +26,21 @@ class CatchFirestoreProvider {
     return pokemons;
   }
 
+  Future<String> fetchObsCatch(String doc) async {
+    String result = await _collectionCatch
+        .doc(_auth.currentUser!.uid)
+        .collection("pokemons")
+        .doc(doc)
+        .get()
+        .then((value) {
+      String obs = value.data()!['obs'];
+      return obs;
+    }).catchError((error) {
+      return "";
+    });
+    return result;
+  }
+
   Future<String> saveCatch(PokemonModel pokemon, String pokeball) async {
     String result = await _collectionCatch
         .doc(_auth.currentUser!.uid)
@@ -51,6 +66,20 @@ class CatchFirestoreProvider {
         .collection("pokemons")
         .doc(doc)
         .update({"obs": obs}).then((value) {
+      return true;
+    }).catchError((error) {
+      return false;
+    });
+    return result;
+  }
+
+  Future<bool> leavePokemon(String doc) async {
+    bool result = await _collectionCatch
+        .doc(_auth.currentUser!.uid)
+        .collection("pokemons")
+        .doc(doc)
+        .delete()
+        .then((value) {
       return true;
     }).catchError((error) {
       return false;
