@@ -45,9 +45,10 @@ Objetivo do módulo é registrar os pokémons avistados e pegos, buscar todos os
 
 Passos para registrar o pokémon
 - Procure um pokémon
+- - Pelo número dele ou o seu nome completo
 - Clique no cartão do pokémon
 - - Salvará como visto
-- Tente capturar
+- Tente capturar (a medida que melhora o pokebola mais chances)
 - - Se capturar salvará como capturado
 
 Passos para favoritar ou desfavoritar um pokémon 
@@ -70,4 +71,8 @@ Passos para editar ou abandonar um pokémon
 <img src="/prints/home_dex.png" alt="Home Pokédex Screen"/>
 <img src="/prints/home_catch.png" alt="Home Catch Screen"/>
 <img src="/prints/home_fav.png" alt="Home Favorite Screen"/>
+<img src="/prints/discovery.png" alt="Discovery Screen"/>
 <img src="/prints/details_normal.png" alt="Details Normal Screen"/>
+<img src="/prints/details_catch.png" alt="Details Catch Screen"/>
+<img src="/prints/catch.png" alt="Catch Screen"/>
+<img src="/prints/catch_gratz.png" alt="Gratz Screen"/>
