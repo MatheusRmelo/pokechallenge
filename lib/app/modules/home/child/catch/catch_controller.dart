@@ -32,14 +32,23 @@ abstract class _CatchControllerBase with Store {
     var result = await repository.discoveryPokemon(pokemon);
     if (result) {
       List<PokemonModel> newPokedex = controller.pokedex;
-      newPokedex.add(pokemon);
+      bool exists = false;
+      for (var element in controller.pokedex) {
+        if (element.id == pokemon.id) {
+          exists = true;
+        }
+      }
+      if (!exists) {
+        newPokedex.add(pokemon);
+      }
+
       controller.pokedex = newPokedex;
     }
   }
 
   @action
   Future<void> goCatch(PokemonModel pokemon) async {
-    Random random = new Random();
+    Random random = Random();
     int randomNumber = random.nextInt(pokeball.rate);
     if (pokemon.baseExperience <= randomNumber) {
       var result = await repository.saveCatch(pokemon, pokeball.name);

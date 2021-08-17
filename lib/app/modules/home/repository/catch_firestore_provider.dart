@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
 class CatchFirestoreProvider {
-  CollectionReference _collectionCatch =
+  final CollectionReference _collectionCatch =
       FirebaseFirestore.instance.collection('catch');
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<List<PokemonModel>> fetchMyCatches() async {
     List<PokemonModel> pokemons = [];
@@ -15,14 +15,14 @@ class CatchFirestoreProvider {
         .orderBy("id")
         .get();
 
-    result.docs.forEach((element) {
+    for (var element in result.docs) {
       Map<String, dynamic> json = {
         ...element.data(),
         'doc': element.id,
       };
       PokemonModel pokemon = PokemonModel.fromJson(json);
       pokemons.add(pokemon);
-    });
+    }
     return pokemons;
   }
 

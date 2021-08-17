@@ -22,7 +22,7 @@ class HomeModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (_, args) => const HomeWidget()),
-        ChildRoute('/discovery', child: (_, args) => DiscoveryPage()),
+        ChildRoute('/discovery', child: (_, args) => const DiscoveryPage()),
         ChildRoute('/details',
             child: (_, args) => DetailsPage(
                   pokemon: args.data['pokemon'],

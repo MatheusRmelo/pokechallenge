@@ -9,15 +9,15 @@ Widget inputSearch(Function onChanged) {
           offset: Offset.fromDirection(1, 1),
           spreadRadius: 0),
     ], color: Colors.white, borderRadius: BorderRadius.circular(8)),
-    margin: EdgeInsets.all(16),
+    margin: const EdgeInsets.all(16),
     child: TextField(
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(16),
+            contentPadding: const EdgeInsets.all(16),
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
             hintText: 'Pesquise pelo nome',
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-            suffixIcon: Icon(
+            suffixIcon: const Icon(
               Icons.search,
               size: 32,
             )),

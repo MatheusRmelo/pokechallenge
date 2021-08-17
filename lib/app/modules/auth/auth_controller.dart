@@ -12,12 +12,6 @@ abstract class _AuthControllerBase with Store {
   @observable
   bool error = false;
 
-  void checkUser() {
-    if (_firebaseAuth.currentUser != null) {
-      Modular.to.navigate("/home");
-    }
-  }
-
   @action
   Future<void> signInWithGoogle() async {
     error = false;

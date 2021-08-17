@@ -1,18 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokemon/app/modules/home/child/details/details_controller.dart';
-import 'package:pokemon/app/modules/home/models/pokeball_model.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/utils/texts.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage(
-      {Key? key,
-      required PokemonModel this.pokemon,
-      bool this.catchPoke = false})
+  const DetailsPage({Key? key, required this.pokemon, this.catchPoke = false})
       : super(key: key);
 
   final PokemonModel pokemon;
@@ -24,10 +18,10 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   final controller = Modular.get<DetailsController>();
-
+  @override
   void initState() {
     super.initState();
-    controller.fetchObsCatch(widget.pokemon.doc);
+    controller.fetchObsCatch(widget.pokemon.doc, widget.pokemon.favorite);
   }
 
   @override
@@ -41,28 +35,44 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Container(
           width: size.width,
           height: size.height,
-          padding: EdgeInsets.all(32),
+          padding: const EdgeInsets.all(32),
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(16)),
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 width: size.width,
                 height: size.height * 0.3,
                 child: Image.network(pokemon.image),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    pokemon.name,
-                    style: tsHeading2,
+                  Row(
+                    children: [
+                      Text(
+                        pokemon.name,
+                        style: tsHeading2,
+                      ),
+                      Text(
+                        " - N° ${pokemon.id.toString()}",
+                        style: tsHeading2,
+                      ),
+                    ],
                   ),
-                  Text(
-                    " - N° ${pokemon.id.toString()}",
-                    style: tsHeading2,
-                  ),
+                  IconButton(
+                      onPressed: () {
+                        controller.favoritePokemon(pokemon);
+                      },
+                      icon: Icon(
+                        controller.favorite
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        color: controller.favorite ? Colors.red : Colors.black,
+                        size: 32,
+                      ))
                 ],
               ),
               widget.catchPoke
@@ -70,14 +80,14 @@ class _DetailsPageState extends State<DetailsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 16, bottom: 8),
-                          child: Text("Observações"),
+                          margin: const EdgeInsets.only(top: 16, bottom: 8),
+                          child: const Text("Observações"),
                         ),
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey)),
-                          margin: EdgeInsets.only(bottom: 16),
-                          padding: EdgeInsets.only(left: 8),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.only(left: 8),
                           height: 100,
                           width: size.width,
                           child: TextFormField(
@@ -85,7 +95,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             onChanged: (text) {
                               controller.obs = text;
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Observações da captura"),
                             keyboardType: TextInputType.multiline,
@@ -94,7 +104,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                         controller.success
                             ? Container(
-                                margin: EdgeInsets.only(bottom: 8),
+                                margin: const EdgeInsets.only(bottom: 8),
                                 child: const Text(
                                   "Sucesso ao salvar observação!",
                                   style: TextStyle(
@@ -104,7 +114,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               )
                             : controller.error
                                 ? Container(
-                                    margin: EdgeInsets.only(bottom: 8),
+                                    margin: const EdgeInsets.only(bottom: 8),
                                     child: const Text(
                                       "Erro ao se comunicar com o servidor",
                                       style: TextStyle(
@@ -113,7 +123,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                     ),
                                   )
                                 : Container(),
-                        Container(
+                        SizedBox(
                           width: size.width,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -167,7 +177,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
               loading
                   ? Container(
-                      margin: EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
                       child: const CircularProgressIndicator(),
                     )
                   : ElevatedButton(
@@ -194,10 +204,10 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
             ],
             content: Padding(
-              padding: EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
               child: Text(
                 'Abandonar o pokémon ${widget.pokemon.name} 😔',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           );

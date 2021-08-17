@@ -1,16 +1,25 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
-import 'package:pokemon/app/modules/home/repository/repository.dart';
+import 'package:pokemon/app/modules/home/tests/pokes_test.dart';
 part 'home_controller.g.dart';
 
 class HomeController = _HomeControllerBase with _$HomeController;
 
-abstract class _HomeControllerBase with Store {
-  final HomeRepository repository;
+List<PokemonModel> pokedexTest = [
+  PokemonModel.fromJson(jsonDecode(dittoJson)),
+  PokemonModel.fromJson(jsonDecode(arcanineJson)),
+  PokemonModel.fromJson(jsonDecode(charmanderJson)),
+  PokemonModel.fromJson(jsonDecode(machampJson))
+];
+List<PokemonModel> catchesTest = [
+  PokemonModel.fromJson(jsonDecode(dittoJson)),
+];
 
-  _HomeControllerBase(this.repository);
+abstract class _HomeControllerBase with Store {
   @observable
   List<PokemonModel> pokedex = [];
   List<PokemonModel> fullPokedex = [];
@@ -23,10 +32,10 @@ abstract class _HomeControllerBase with Store {
   bool loading = true;
 
   @action
-  Future<bool> getPokemons() async {
+  bool getPokemons() {
     loading = true;
-    List<PokemonModel> newPokedex = await repository.fetchMyPokedex();
-    List<PokemonModel> newCatches = await repository.fetchMyCatches();
+    List<PokemonModel> newPokedex = pokedexTest;
+    List<PokemonModel> newCatches = catchesTest;
     List<PokemonModel> newFavorites = [];
     for (var element in newPokedex) {
       if (element.favorite) {
@@ -48,14 +57,12 @@ abstract class _HomeControllerBase with Store {
 
   void logout() {
     FirebaseAuth.instance.signOut().then((value) {
-      Modular.to.navigate("/auth");
+      Modular.to.navigate("/");
     });
   }
 
   @action
-  Future<void> favoritePokemon(PokemonModel pokemon) async {
-    String docCatch = "";
-    String docDex = "";
+  favoritePokemon(PokemonModel pokemon) {
     bool favorite = !pokemon.favorite;
     List<PokemonModel> newCatches = catches;
     List<PokemonModel> newPokedex = pokedex;
@@ -63,30 +70,22 @@ abstract class _HomeControllerBase with Store {
 
     for (var element in newCatches) {
       if (element.id == pokemon.id) {
-        docCatch = element.doc;
         element.favorite = favorite;
       }
     }
     for (var element in newPokedex) {
       if (element.id == pokemon.id) {
-        docDex = element.id.toString();
         element.favorite = favorite;
       }
     }
     if (favorite) {
       newFavorites.add(pokemon);
     } else {
-      newFavorites = [];
-      for (var element in favorites) {
-        if (element.id != pokemon.id) {
-          newFavorites.add(element);
-        }
-      }
+      newFavorites.remove(pokemon);
     }
     pokedex = newPokedex;
     catches = newCatches;
     favorites = newFavorites;
-    await repository.favoritePokemon(docCatch, docDex, favorite);
   }
 
   @action

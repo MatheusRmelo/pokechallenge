@@ -10,6 +10,6 @@ class AuthModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (_, args) => AuthWidget()),
+        ChildRoute('/', child: (_, args) => const AuthWidget()),
       ];
 }

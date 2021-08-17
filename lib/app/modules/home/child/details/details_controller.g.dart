@@ -71,12 +71,27 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
     });
   }
 
+  final _$favoriteAtom = Atom(name: '_DetailsControllerBase.favorite');
+
+  @override
+  bool get favorite {
+    _$favoriteAtom.reportRead();
+    return super.favorite;
+  }
+
+  @override
+  set favorite(bool value) {
+    _$favoriteAtom.reportWrite(value, super.favorite, () {
+      super.favorite = value;
+    });
+  }
+
   final _$fetchObsCatchAsyncAction =
       AsyncAction('_DetailsControllerBase.fetchObsCatch');
 
   @override
-  Future<void> fetchObsCatch(String doc) {
-    return _$fetchObsCatchAsyncAction.run(() => super.fetchObsCatch(doc));
+  Future<void> fetchObsCatch(String doc, bool fav) {
+    return _$fetchObsCatchAsyncAction.run(() => super.fetchObsCatch(doc, fav));
   }
 
   final _$saveObsAsyncAction = AsyncAction('_DetailsControllerBase.saveObs');
@@ -94,13 +109,28 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
     return _$leavePokemonAsyncAction.run(() => super.leavePokemon(doc));
   }
 
+  final _$_DetailsControllerBaseActionController =
+      ActionController(name: '_DetailsControllerBase');
+
+  @override
+  void favoritePokemon(PokemonModel pokemon) {
+    final _$actionInfo = _$_DetailsControllerBaseActionController.startAction(
+        name: '_DetailsControllerBase.favoritePokemon');
+    try {
+      return super.favoritePokemon(pokemon);
+    } finally {
+      _$_DetailsControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 textEditingController: ${textEditingController},
 obs: ${obs},
 error: ${error},
-success: ${success}
+success: ${success},
+favorite: ${favorite}
     ''';
   }
 }

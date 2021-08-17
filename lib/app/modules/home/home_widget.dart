@@ -16,6 +16,7 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   final controller = Modular.get<HomeController>();
 
+  @override
   void initState() {
     super.initState();
     controller.getPokemons();
@@ -23,7 +24,6 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Observer(builder: (context) {
       return DefaultTabController(
           length: 3,
@@ -31,7 +31,8 @@ class _HomeWidgetState extends State<HomeWidget> {
             appBar: AppBar(
               actions: [
                 IconButton(
-                    onPressed: controller.logout, icon: Icon(Icons.logout))
+                    onPressed: controller.logout,
+                    icon: const Icon(Icons.logout))
               ],
               bottom: TabBar(
                 tabs: [
@@ -73,21 +74,20 @@ class _HomeWidgetState extends State<HomeWidget> {
                       _favoriteWidget(),
                     ],
                   ),
-            floatingActionButton:
-                controller.pokedex != null && controller.pokedex.isNotEmpty
-                    ? FloatingActionButton(
-                        backgroundColor: Colors.red[400],
-                        child: Icon(Icons.add),
-                        onPressed: controller.addPokemon,
-                      )
-                    : Container(),
+            floatingActionButton: controller.pokedex.isNotEmpty
+                ? FloatingActionButton(
+                    backgroundColor: Colors.red[400],
+                    child: const Icon(Icons.add),
+                    onPressed: controller.addPokemon,
+                  )
+                : Container(),
           ));
     });
   }
 
   Widget _pokedexWidget() {
     return Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: controller.pokedex.isEmpty && controller.fullPokedex.isEmpty
             ? Center(
                 child: Column(
@@ -119,9 +119,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             : Column(
                 children: [
                   inputSearch(controller.searchPokedex),
-                  controller.pokedex.length == 0
+                  controller.pokedex.isEmpty
                       ? Container(
-                          margin: EdgeInsets.only(top: 32),
+                          margin: const EdgeInsets.only(top: 32),
                           child: Text(
                             "Pesquisa resultou em 0 resultados",
                             style: tsHeading2,

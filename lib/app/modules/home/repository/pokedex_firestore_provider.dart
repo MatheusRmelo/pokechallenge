@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 
 class PokedexFirestoreProvider {
-  CollectionReference _collectionPokedex =
+  final CollectionReference _collectionPokedex =
       FirebaseFirestore.instance.collection('pokedex');
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<List<PokemonModel>> fetchMyPokedex() async {
     List<PokemonModel> pokedex = [];
     var result = await _collectionPokedex
@@ -14,14 +14,14 @@ class PokedexFirestoreProvider {
         .orderBy("id")
         .get();
 
-    result.docs.forEach((element) {
+    for (var element in result.docs) {
       Map<String, dynamic> json = {
         ...element.data(),
         'doc': element.id,
       };
       PokemonModel pokemon = PokemonModel.fromJson(json);
       pokedex.add(pokemon);
-    });
+    }
     return pokedex;
   }
 

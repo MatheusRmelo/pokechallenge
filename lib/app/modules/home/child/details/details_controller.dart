@@ -22,9 +22,14 @@ abstract class _DetailsControllerBase with Store {
   bool error = false;
   @observable
   bool success = false;
+  @observable
+  bool favorite = false;
 
   @action
-  Future<void> fetchObsCatch(String doc) async {
+  Future<void> fetchObsCatch(String doc, bool fav) async {
+    success = false;
+    error = false;
+    favorite = fav;
     textEditingController.text = await repository.fetchObsCatch(doc);
   }
 
@@ -40,14 +45,20 @@ abstract class _DetailsControllerBase with Store {
     var result = await repository.leavePokemon(doc);
     if (result) {
       List<PokemonModel> newCatches = [];
-      controller.fullCatches.forEach((element) {
+      for (var element in controller.fullCatches) {
         if (element.doc != doc) {
           newCatches.add(element);
         }
-      });
+      }
       controller.catches = newCatches;
       controller.fullCatches = newCatches;
     }
     return result;
+  }
+
+  @action
+  void favoritePokemon(PokemonModel pokemon) {
+    favorite = !pokemon.favorite;
+    controller.favoritePokemon(pokemon);
   }
 }

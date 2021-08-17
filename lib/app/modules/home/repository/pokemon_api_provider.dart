@@ -19,16 +19,9 @@ class PokemonApiProvider {
         };
         PokemonModel pokemon = PokemonModel.fromJson(json);
 
-        // PokemonModel pokemon = PokemonModel(
-        //     data['id'],
-        //     data['id'].toString(),
-        //     data['name'],
-        //     data['sprites']['front_default'],
-        //     data['base_experience'],
-        //     false);
         pokemons.add(pokemon);
       } catch (e) {
-        print(e);
+        return [];
       }
     }
 

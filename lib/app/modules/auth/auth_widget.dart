@@ -18,11 +18,6 @@ class _AuthWidgetState extends State<AuthWidget> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  void initState() {
-    super.initState();
-    controller.checkUser();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,7 +32,7 @@ class _AuthWidgetState extends State<AuthWidget> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 16),
+                  margin: const EdgeInsets.only(bottom: 16),
                   child: Text(
                     "Bem vindo ao mundo Pokémon",
                     style: tsHeading1,
@@ -49,11 +44,12 @@ class _AuthWidgetState extends State<AuthWidget> {
                   width: size.width * 0.6,
                   height: size.height * 0.4,
                 ),
-                Container(
+
+                SizedBox(
                   width: size.width * 0.6,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.red[400]),
-                    child: Text("Entrar com Google"),
+                    child: const Text("Entrar com Google"),
                     onPressed: () {
                       controller.signInWithGoogle();
                     },
@@ -61,7 +57,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                 ),
                 controller.error
                     ? Container(
-                        margin: EdgeInsets.only(top: 16),
+                        margin: const EdgeInsets.only(top: 16),
                         child: const Text(
                           "Falha ao fazer o login, verifique sua conexão",
                           style: TextStyle(color: Colors.red),

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -8,8 +7,7 @@ import 'package:pokemon/app/modules/home/models/pokemon_model.dart';
 import 'package:pokemon/utils/texts.dart';
 
 class CatchPage extends StatefulWidget {
-  const CatchPage({Key? key, required PokemonModel this.pokemon})
-      : super(key: key);
+  const CatchPage({Key? key, required this.pokemon}) : super(key: key);
 
   final PokemonModel pokemon;
 
@@ -38,19 +36,19 @@ class _CatchPageState extends State<CatchPage> {
             child: Container(
           width: size.width,
           height: size.height,
-          padding: EdgeInsets.all(32),
+          padding: const EdgeInsets.all(32),
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(16)),
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 width: size.width,
                 height: size.height * 0.3,
                 child: Image.network(pokemon.image),
               ),
-              Container(
+              SizedBox(
                 width: size.width,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +67,7 @@ class _CatchPageState extends State<CatchPage> {
                   ? Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 32, bottom: 16),
+                          margin: const EdgeInsets.only(top: 32, bottom: 16),
                           child: Image.asset(
                             "assets/${controller.pokeball.name}_catch.png",
                             width: 64,
@@ -79,38 +77,38 @@ class _CatchPageState extends State<CatchPage> {
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey)),
-                          margin: EdgeInsets.only(top: 16, bottom: 16),
-                          padding: EdgeInsets.only(left: 8),
+                          margin: const EdgeInsets.only(top: 16, bottom: 16),
+                          padding: const EdgeInsets.only(left: 8),
                           height: 100,
                           child: TextFormField(
                             onChanged: (text) {
                               controller.obs = text;
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Observações da captura"),
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: size.width * 0.6,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.green),
                               onPressed: controller.saveObs,
-                              child: Text("Continuar")),
+                              child: const Text("Continuar")),
                         )
                       ],
                     )
                   : Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 16),
-                          child: Text("Escolha uma pokébola"),
+                          margin: const EdgeInsets.only(top: 16),
+                          child: const Text("Escolha uma pokébola"),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 16),
+                          margin: const EdgeInsets.only(top: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -125,7 +123,7 @@ class _CatchPageState extends State<CatchPage> {
                                           controller.pokeball.name == "pokeball"
                                               ? Border.all(color: Colors.black)
                                               : null),
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: Image.asset(
                                     "assets/pokeball.png",
                                     width: 64,
@@ -143,7 +141,7 @@ class _CatchPageState extends State<CatchPage> {
                                               "greatball"
                                           ? Border.all(color: Colors.black)
                                           : null),
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: Image.asset(
                                     "assets/greatball.png",
                                     width: 64,
@@ -161,7 +159,7 @@ class _CatchPageState extends State<CatchPage> {
                                               "ultraball"
                                           ? Border.all(color: Colors.black)
                                           : null),
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: Image.asset(
                                     "assets/ultraball.png",
                                     width: 64,
@@ -173,7 +171,7 @@ class _CatchPageState extends State<CatchPage> {
                         ),
                         Container(
                           width: 200,
-                          margin: EdgeInsets.only(top: 16),
+                          margin: const EdgeInsets.only(top: 16),
                           child: ElevatedButton(
                               onPressed: () {
                                 controller.goCatch(pokemon);

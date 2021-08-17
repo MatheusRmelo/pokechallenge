@@ -10,7 +10,7 @@ class DiscoveryController = _DiscoveryControllerBase with _$DiscoveryController;
 abstract class _DiscoveryControllerBase with Store {
   final HomeRepository repository;
   @observable
-  Timer _timer = Timer(Duration(seconds: 1), () {});
+  Timer _timer = Timer(const Duration(seconds: 1), () {});
   @observable
   String _search = "";
 
@@ -38,7 +38,7 @@ abstract class _DiscoveryControllerBase with Store {
     if (_timer.isActive) {
       _timer.cancel();
     }
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       searchPokemons();
     });
   }

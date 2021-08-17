@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FavoriteFirestoreProvider {
-  CollectionReference _collectionCatch =
+  final CollectionReference _collectionCatch =
       FirebaseFirestore.instance.collection('catch');
-  CollectionReference _collectionPokedex =
+  final CollectionReference _collectionPokedex =
       FirebaseFirestore.instance.collection('pokedex');
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> favoritePokemon(
       String docCatch, String docDex, bool favorite) async {
@@ -17,7 +17,6 @@ class FavoriteFirestoreProvider {
         .update({'favorite': favorite}).then((value) {
       return true;
     }).catchError((e) {
-      print(e);
       return false;
     });
     if (result) {
