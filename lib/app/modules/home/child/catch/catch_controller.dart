@@ -19,11 +19,13 @@ abstract class _CatchControllerBase with Store {
   @observable
   String obs = "";
   @observable
-  PokeballModel pokeball = PokeballModel("pokeball", 100);
+  PokeballModel _pokeball = PokeballModel("pokeball", 100);
   @observable
   String status = "";
   @observable
   bool catchPoke = false;
+  @observable
+  int ballsBrokes = 0;
 
   _CatchControllerBase(this.repository);
 
@@ -47,9 +49,24 @@ abstract class _CatchControllerBase with Store {
   }
 
   @action
+  set pokeball(PokeballModel pokeball) {
+    ballsBrokes = 0;
+    status = "";
+    _pokeball = pokeball;
+  }
+
+  @action
+  PokeballModel get pokeball => _pokeball;
+
+  @action
   Future<void> goCatch(PokemonModel pokemon) async {
     Random random = Random();
     int randomNumber = random.nextInt(pokeball.rate);
+    // For Legendarys pokémons
+    if (pokemon.baseExperience > 300 && randomNumber == 300) {
+      int newRandom = random.nextInt(30);
+      randomNumber += newRandom;
+    }
     if (pokemon.baseExperience <= randomNumber) {
       var result = await repository.saveCatch(pokemon, pokeball.name);
       if (result != "") {
@@ -66,6 +83,7 @@ abstract class _CatchControllerBase with Store {
     } else {
       catchPoke = false;
       status = "Sua ${pokeball.name} quebrou 😔";
+      ballsBrokes++;
     }
   }
 
@@ -85,5 +103,6 @@ abstract class _CatchControllerBase with Store {
     pokeball = PokeballModel("pokeball", 100);
     status = "";
     catchPoke = false;
+    ballsBrokes = 0;
   }
 }

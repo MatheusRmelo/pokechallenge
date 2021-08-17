@@ -179,7 +179,11 @@ class _CatchPageState extends State<CatchPage> {
                               child: Text(
                                   "Jogar ${controller.pokeball.name} x${(controller.pokeball.rate / 100).toStringAsFixed(0)}")),
                         ),
-                        Text(controller.status)
+                        Text(controller.status),
+                        controller.ballsBrokes > 0
+                            ? Text(
+                                "Você já jogou ${controller.ballsBrokes} ${controller.pokeball.name}")
+                            : Container()
                       ],
                     ),
             ],

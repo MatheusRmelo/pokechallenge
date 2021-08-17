@@ -14,7 +14,7 @@ Observação
 
 Executar no dispositivo Android 
 - Baixe o APK no link
-- - https://drive.google.com/file/d/1Ys94t2QtRFKZIthhUyD7yP8iacrYeeXS/view?usp=sharing
+- - https://drive.google.com/file/d/1spvqBhSUxWLi9coZK8_SypgxQTV33hJj/view?usp=sharing
 - Instale o aplicativo
 
 ## Documentação
