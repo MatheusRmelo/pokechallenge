@@ -7,6 +7,7 @@ Desafio da NG Informática
 Executar no computador ( comandos )
 - flutter pub get
 - flutter run
+
 Observação
 - Caso não tenha os arquivos do mobx controller.g.dart, execute
 - - flutter pub run build_runner build --delete-conflicting-outputs
